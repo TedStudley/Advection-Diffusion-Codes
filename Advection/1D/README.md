@@ -3,7 +3,7 @@ Introduction
 
 This code serves the purpose of modeling advection in one-dimensional temperature advection using the finite difference method. The purpose of this code is to provide a framework for testing very simple advection problems in few lines of code. For that purpose, this README document will serve as documentation for the functions used in this framework.
 
-This code uses the Eigen linear algebra library. Eigen can be downloaded [here](eigen.tuxfamily.org). Either install Eigen to your system include directory or directly into `Advection/1D/include`.
+This code uses the Eigen linear algebra library. Eigen can be downloaded [here](http://www.eigen.tuxfamily.org). Either install Eigen to your system include directory or directly into `Advection/1D/include`.
 
 Documentation
 =============
@@ -85,7 +85,7 @@ Advection Methods
 Sample Program
 ==============
 A sample program to advect a square wave once around until it reaches the approximate starting position again.
-```
+```C++
 
 int main() {
   const unsigned int N = 1024;
