@@ -5,8 +5,8 @@
 using namespace Eigen;
 
 void squareWave (Ref<VectorXd>,   // u
-                 unsigned int);   // N
+                 const int);      // N
 
 void fourierSquare (Ref<VectorXd>,  // u
-                    unsigned int,   // N
-                    double);        // t0
+                    const int,      // N
+                    const double);  // t0

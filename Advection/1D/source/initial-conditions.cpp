@@ -6,7 +6,7 @@ using namespace Eigen;
 
 
 void squareWave (Ref<VectorXd> u,
-                 unsigned int N) {
+                 const int N) {
   const double h = 1.0 / (N + 1);
   double x = 0.5 * h;
 
@@ -17,8 +17,8 @@ void squareWave (Ref<VectorXd> u,
 }
 
 void fourierSquare (Ref<VectorXd> u,
-                    unsigned int N,
-                    double t0) {
+                    const int N,
+                    const double t0) {
   const double h = 1.0 / (N + 1);
   double x = 0.5 * h;
 
