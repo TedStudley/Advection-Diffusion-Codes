@@ -18,11 +18,11 @@ Initial Temperature
 -------------------
 The initial temperature conditions are generally functions of the form
 
-`void (*) (Ref<VectorXd> u, unsigned int N)`
+`void (*) (Ref&lt;VectorXd&gt; u, const int N)`
 
 where `u` is a reference to the vector object describing the scalar temperature field and `N` is the number of subdivisions of the interval domain. The exception  to this format is the initial condition `fourierSquare`, which requires an initial temperature t0, and therefore must be called using
 
-`void fourierSquare (Ref<VectorXd> u, unsigned int N, double t0)`.
+`void fourierSquare (Ref&lt;VectorXd&gt; u, const int N, const double t0)`.
 
 The functions work in-place, so nothing is returned. A full catalogue of the initial conditions can be found below. Be wary of the value of `t0` for the `fourierSquare` initial condition. Choosing `t0` to be too small will result in an initial temperature which has large oscillations at the steep gradients, while choosing `t0` to be too small will result in the initial temperature being too diffused. I have found a good value for `t0` to be 0.00001.
 
@@ -30,13 +30,13 @@ Advection Methods
 -----------------
 Similar to the initial temperature conditions, the advection methods also work in-place. In general, they are functions of the form
 
-`void (*) (Ref<VectorXd> u, unsigned int N, double v, double delta_t)`
+`void (*) (Ref&lt;VectorXd&gt; u, const int N, const double v, const double delta_t)`
 
 where `u` is, again, a reference to the vector object describing the scalar temperature field, `N` is the number of subdivisions of the interval domain, `v` is the velocity of advection, and `delta_t` is the length of the current timestep. Be warned that depending on the choice of `N`, `v` and `delta_t`, the maximum stable CFL value for some advection methods may be exceeded. Most functions will attempt to warn the user if these parameters are chosen such that the CFL condition exceeds 1.0, where stability is not generally guaranteed.
 
 Output
 ------
-Output is handled almost entirely through Eigen. The VectorXd object can be easily output to any output stream using `operator<<`. I have found it useful to output the transpose of the temperature vector, which can be done using the `VectorXd::transpose()` member function.
+Output is handled almost entirely through Eigen. The VectorXd object can be easily output to any output stream using `operator&lt;&lt;`. I have found it useful to output the transpose of the temperature vector, which can be done using the `VectorXd::transpose()` member function.
 
 Function Quickreference
 =======================
@@ -95,7 +95,7 @@ int main() {
   VectorXd u (N);
   squareWave (u, N);
   for (int timestep = 0; timestep < 10000; ++timestep)
-    frommMethod (u, N, delta_t);
+    frommMethod (u, N, kappa,  delta_t);
  
   cout << u.transpose () << endl;
 }

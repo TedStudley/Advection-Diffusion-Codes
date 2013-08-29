@@ -1,5 +1,5 @@
 #include <initial-conditions.h>
-#include <advection.h>
+#include <diffusion.h>
 
 #include <Eigen/Dense>
 
@@ -8,19 +8,18 @@
 using namespace Eigen;
 using namespace std;
 
+
 int main() {
   const int N          = 1024;
-  const double delta_t = 0.001;
-  const double v       = 0.5;
+  const double delta_t = 5e-6;
+  const double kappa   = 0.0675;
 
   VectorXd u (N);
-
   squareWave (u, N);
-
-  for (int timestep = 0; timestep < 500; ++timestep)
-    frommVanLeer (u, N, v, delta_t);
+  for (int i = 0; i < 100 ; ++i)
+    crankNicolson (u, N, kappa, delta_t);
 
   cout << u.transpose() << endl;
-
+  
   return 0;
 }
