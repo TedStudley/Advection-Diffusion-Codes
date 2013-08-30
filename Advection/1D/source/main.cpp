@@ -1,9 +1,8 @@
 #include <initial-conditions.h>
 #include <advection.h>
+#include <output.h>
 
 #include <Eigen/Dense>
-
-#include <iostream>
 
 using namespace Eigen;
 using namespace std;
@@ -20,7 +19,7 @@ int main() {
   for (int timestep = 0; timestep < 500; ++timestep)
     frommVanLeer (u, N, v, delta_t);
 
-  cout << u.transpose() << endl;
+  displayField (u, N);
 
   return 0;
 }
