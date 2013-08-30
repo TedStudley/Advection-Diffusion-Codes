@@ -18,11 +18,11 @@ Initial Temperature
 -------------------
 The initial temperature conditions are generally functions of the form
 
-`void (*) (Ref&lt;VectorXd&gt; u, const int N)`
+`void (*) (Ref<VectorXd> u, const int N)`
 
 where `u` is a reference to the vector object describing the scalar temperature field and `N` is the number of subdivisions of the interval domain. The exception  to this format is the initial condition `fourierSquare`, which requires an initial temperature t0, and therefore must be called using
 
-`void fourierSquare (Ref&lt;VectorXd&gt; u, const int N, const double t0)`.
+`void fourierSquare (Ref<VectorXd> u, const int N, const double t0)`.
 
 The functions work in-place, so nothing is returned. A full catalogue of the initial conditions can be found below. Be wary of the value of `t0` for the `fourierSquare` initial condition. Choosing `t0` to be too small will result in an initial temperature which has large oscillations at the steep gradients, while choosing `t0` to be too small will result in the initial temperature being too diffused. I have found a good value for `t0` to be 0.00001.
 
@@ -30,7 +30,7 @@ Advection Methods
 -----------------
 Similar to the initial temperature conditions, the advection methods also work in-place. In general, they are functions of the form
 
-`void (*) (Ref&lt;VectorXd&gt; u, const int N, const double v, const double delta_t)`
+`void (*) (Ref<VectorXd> u, const int N, const double v, const double delta_t)`
 
 where `u` is, again, a reference to the vector object describing the scalar temperature field, `N` is the number of subdivisions of the interval domain, `v` is the velocity of advection, and `delta_t` is the length of the current timestep. Be warned that depending on the choice of `N`, `v` and `delta_t`, the maximum stable CFL value for some advection methods may be exceeded. Most functions will attempt to warn the user if these parameters are chosen such that the CFL condition exceeds 1.0, where stability is not generally guaranteed.
 
@@ -38,7 +38,7 @@ Output
 ------
 Output is handled through the function `displayField`. There are two ways to call `displayField`, by either specifying an output stream, or simply sending the output to `stdout`. To send output to `stdout`, you may simply call `displayField (u, N)`, where `u` is the temperature field to display, and `N` is the number of subdivisions in each spatial direction. To send output to an arbitrary output stream, call `displayField (u, N, stream)`, where `u` and `N` are defined as before, and `stream` is the output stream to be written to.
 
-Included in the same folder as this README is the bash script `plotscript`. If your computer can run bash scripts and has gnuplot, you can run this script to automatically plot output files from advection-1d. Just run it using `./plotscript &lt;input&gt; &lt;size&gt; &lt;output&gt;` where `&lt;input&gt;` is your outputted data from advection-1d, `&lt;size&gt;` is the size of the input (`N` from inside advection-1d), and `&lt;output&gt;` is the file to output to. Currently, plotscript only outputs to vector graphics files, although it is trivial to change the output type by editing the script.
+Included in the same folder as this README is the bash script `plotscript`. If your computer can run bash scripts and has gnuplot, you can run this script to automatically plot output files from advection-1d. Just run it using `./plotscript <input> <size> <output>` where `<input>` is your outputted data from advection-1d, `<size>` is the size of the input (`N` from inside advection-1d), and `<output>` is the file to output to. Currently, plotscript only outputs to vector graphics files, although it is trivial to change the output type by editing the script.
 Function Quickreference
 =======================
 
