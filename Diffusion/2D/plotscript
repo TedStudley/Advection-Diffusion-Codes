@@ -1,0 +1,5 @@
+set term svg
+set output "plot.svg"
+set object 1 rect from screen 0,0,0 to screen 1,1,0 behind
+set object 1 rect fc rgb "white" fillstyle solid 1.0
+splot 'log' matrix with lines

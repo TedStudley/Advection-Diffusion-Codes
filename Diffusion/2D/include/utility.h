@@ -4,11 +4,17 @@
 #define sign(x)        (x < 0) ? (-1) : 1
 #define mod(x, N)      (x + N) % N
 
+#include <Eigen/Dense>
+
 #include <iostream>
+#include <ostream>
+
+using namespace Eigen;
 using namespace std;
 
+
 inline double periodicBC (Ref<VectorXd> u,
-                          unsigned int N,
+                          const int N,
                           int i) {
   if (i < 0) return periodicBC (u, N, i + N);
   else return u[i % N];

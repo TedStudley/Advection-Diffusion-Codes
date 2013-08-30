@@ -22,7 +22,7 @@ void fourierSquare (Ref<VectorXd> u,
   const double h = 1.0 / (N + 1);
   double x = 0.5 * h;
 
-  unsigned int M = N / 2;
+  unsigned int M = N;
 
   VectorXd bk (M);  
   for (int k = 0; k < int (M); ++k)

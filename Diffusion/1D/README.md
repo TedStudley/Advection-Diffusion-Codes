@@ -84,7 +84,6 @@ Advection Methods
 
 Sample Program
 ==============
-A sample program to advect a square wave once around until it reaches the approximate starting position again.
 ```C++
 
 int main() {
