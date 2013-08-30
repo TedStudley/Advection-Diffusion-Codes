@@ -36,7 +36,7 @@ where `u` is, again, a reference to the vector object describing the scalar temp
 
 Output
 ------
-Output is handled almost entirely through Eigen. The VectorXd object can be easily output to any output stream using `operator<<`. I have found it useful to output the transpose of the temperature vector, which can be done using the `VectorXd::transpose()` member function.
+Output is handled through the function `displayField`. There are two ways to call `displayField`, by either specifying an output stream, or simply sending the output to `stdout`. To send output to `stdout`, you may simply call `displayField (u, N)`, where `u` is the temperature field to display, and `N` is the number of subdivisions in each spatial direction. To sent output to an arbitrary output stream, call `displayField (u, N, stream)`, where `u` and `N` are defined as before, and `stream` is the output stream to be written to.
 
 Function Quickreference
 =======================

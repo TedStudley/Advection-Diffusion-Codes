@@ -1,5 +1,6 @@
 #include <initial-conditions.h>
 #include <diffusion.h>
+#include <output.h>
 
 #include <Eigen/Dense>
 
@@ -20,7 +21,7 @@ int main() {
   for (int i = 0; i < 1 ; ++i)
     crankNicolson (u, N, kappa, delta_t);
 
-  cout << u.transpose() << endl;
-  
+  displayField (u, N);
+
   return 0;
 }
