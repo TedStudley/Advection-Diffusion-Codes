@@ -38,6 +38,8 @@ Output
 ------
 Output is handled through the function `displayField`. There are two ways to call `displayField`, by either specifying an output stream, or simply sending the output to `stdout`. To send output to `stdout`, you may simply call `displayField (u, N)`, where `u` is the temperature field to display, and `N` is the number of subdivisions in each spatial direction. To sent output to an arbitrary output stream, call `displayField (u, N, stream)`, where `u` and `N` are defined as before, and `stream` is the output stream to be written to.
 
+Included in the same folder as this README is the bash script `plotscript`. If your computer can run bash scripts and has gnuplot, you can run this script to automatically plot output files from diffusion-2d. Just run it using `./plotscript &lt;input&gt; &lt;size&gt; &lt;output&gt;` where `&lt;input&gt;` is your outputted data from diffusion-2d, `&lt;size&gt;` is the size of the input (`N` from inside diffusion-2d), and `&lt;output&gt;` is the file to output to. Currently, plotscript only outputs to vector graphics files, although it is trivial to change the output type by editing the script.
+
 Function Quickreference
 =======================
 
