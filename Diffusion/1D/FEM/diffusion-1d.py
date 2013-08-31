@@ -3,10 +3,10 @@
 from dolfin import *
 import numpy
 
-N       = 256
-t0      = 0.0001
-kappa   = 0.125
-dt      = 0.001
+N       = 512
+t0      = 0.00001
+kappa   = 1.0
+dt      = 0.0001
 c       = 0.5
 t_end   = 1.0
 
@@ -33,8 +33,10 @@ class FourierSquare(Expression):
     for k in range(0, N / 2):
       values[0] += self._bk[k] * sin ((k + 1) * pi * x[0])
 
-u0 = SquareWave()
+u2 = SquareWave()
+u1 = FourierSquare(N=N, t0=dt)
 #u0 = FourierSquare(N=N, t0=t0)
+#u1 = FourierSquare(N=N, t0=t0+dt)
 
 def boundary(x, on_boundary):
   tol = 1E-15
@@ -45,7 +47,8 @@ bc = DirichletBC(V, Constant(0.0), boundary)
 
 print "==> Interpolating initial data"
 
-u_1 = interpolate(u0, V)
+u_2 = interpolate(u2, V)
+u_1 = interpolate(u1, V)
 
 print "==> Setting up trial and test functions."
 
@@ -54,7 +57,7 @@ v = TestFunction(V)
 
 print "==> discretizing left-hand side"
 
-a = u*v*dx+kappa*dt*0.5*inner(nabla_grad(u), nabla_grad(v))*dx
+a = 6.0*v*u*dx + 9.0*kappa*dt*inner(nabla_grad(v), nabla_grad(u))*dx
 
 print "==> Assembling left-hand side"
 
@@ -64,11 +67,12 @@ u = Function(V)
 t = dt
 
 while t <= t_end:
-  L = u_1*v*dx - kappa*dt*(1-c)*inner(nabla_grad(u_1), nabla_grad(v))*dx
+  L = 8.0*v*u_1*dx - 2.0*v*u_2*dx
   b = assemble(L)
   bc.apply(A, b)
   solve(A, u.vector(), b)
-  plot(u)
-  interactive()
+  plot(u,
+       rescale=False)
+  u_2.assign(u_1)
   u_1.assign(u)
   t += dt

@@ -3,9 +3,9 @@
 from dolfin import *
 import numpy
 
-N       = 64
-t0      = 0.0001
-kappa   = 0.125
+N       = 32
+t0      = 0.001
+kappa   = 1.0
 dt      = 0.001
 c       = 0.5
 t_end   = 1.0
@@ -23,20 +23,22 @@ class SquareWave(Expression):
       values[0] = 0
 
 class FourierSquare(Expression):
-  def __init__(self, N, t0):
+  def __init__(self, N, kappa, t0):
     self._N = N
     self._t0 = t0
-    self._bk = range(0, N / 2)
-    for k in range(0, N / 2):
-      self._bk[k] = (2.0 * (cos ((k + 1) * pi * 0.25) - cos ((k + 1) * pi * 0.75)) / ((k + 1) * pi) * exp (-(k + 1) * (k + 1) * t0 * pi))
+    self._bk = range(0, 10)
+    self._kappa = kappa
+    for k in range(0, 10):
+      self._bk[k] = (2.0 * (cos ((k + 1) * pi * 0.25) - cos ((k + 1) * pi * 0.75)) / ((k + 1) * pi) * exp (-(k + 1) * (k + 1) * kappa * t0 * pi * pi))
+      # exp term is in bk in order to amortize calculations
   def eval(self, values, x):
     values[0] = 0
-    for k1 in range(0, N / 2):
-      for k2 in range(0, N / 2):
+    for k1 in range(0, 10):
+      for k2 in range(0, 10):
         values[0] += self._bk[k1] * self._bk[k2] * sin ((k1 + 1) * pi * x[0]) * sin ((k2 + 1) * pi * x[1])
 
 #u0 = SquareWave()
-u0 = FourierSquare(N=N, t0=t0)
+u0 = FourierSquare(N=N, kappa=kappa, t0=t0)
 
 def boundary(x, on_boundary):
   tol = 1E-15
@@ -64,7 +66,8 @@ while t <= t_end:
   b = assemble(L)
   bc.apply(A, b)
   solve(A, u.vector(), b)
-  plot(u)
+  plot(u,
+       rescale=False)
   interactive()
   u_1.assign(u)
   t += dt
