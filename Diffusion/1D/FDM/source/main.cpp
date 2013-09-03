@@ -21,18 +21,17 @@ int main() {
 
   VectorXd u (N);
   VectorXd u1 (N);
-  fourierSquare (u1, N, kappa, t0);
-  fourierSquare (u, N, kappa, delta_t);
+  squareWave (u1, N);
+  fourierSquare (u, N, kappa, t0);
 
   ofstream initialOut ("initial.dat");
   displayField (u, N, initialOut);
 
-  t = delta_t;
+  t = t0;
 
-  for (int i = 0; i < 1; ++i) {
+  for (int i = 0; i < 10; ++i) {
     utemp = u;
-    crankNicolson (u, N, kappa, delta_t);
-    //BDF2 (u, u1, N, kappa, delta_t);
+    BDF2 (u, u1, N, kappa, delta_t);
     u1 = utemp;
     t += delta_t;
   }
