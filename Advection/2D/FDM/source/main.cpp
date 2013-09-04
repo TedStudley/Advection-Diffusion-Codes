@@ -20,7 +20,7 @@ int main() {
 
   for (int i = 0; i < 1; ++i) {
     cerr << "timestep " << i << ":" << endl;
-    frommMethod (u, N, v, delta_t);
+    frommVanLeer (u, N, v, delta_t);
   }
   
   displayField (u, N);
