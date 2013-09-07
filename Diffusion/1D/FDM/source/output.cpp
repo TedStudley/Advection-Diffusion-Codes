@@ -11,11 +11,11 @@ using namespace std;
 
 void displayField (VectorXd u,
                    const int N) {
-  cout << u << endl;
+  cout << u.transpose () << endl;
 }
 
 void displayField (VectorXd u,
                    const int N,
                    ofstream & stream) {
-  stream << u << endl;
+  stream << u.transpose() << endl;
 }  
