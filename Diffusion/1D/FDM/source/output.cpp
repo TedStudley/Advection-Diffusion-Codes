@@ -9,13 +9,11 @@ using namespace Eigen;
 using namespace std;
 
 
-void displayField (VectorXd u,
-                   const int N) {
+void displayField (VectorXd u) {
   cout << u.transpose () << endl;
 }
 
 void displayField (VectorXd u,
-                   const int N,
                    ofstream & stream) {
   stream << u.transpose() << endl;
 }  

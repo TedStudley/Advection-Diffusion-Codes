@@ -5,8 +5,8 @@
 using namespace Eigen;
 
 
-void squareWave (Ref<VectorXd> u,
-                 const int N) {
+void squareWave (Ref<VectorXd> u) {
+  const int N = u.rows();
   const double h = 1.0 / (N + 1);
   double x = h;
 
@@ -17,9 +17,9 @@ void squareWave (Ref<VectorXd> u,
 }
 
 void fourierSquare (Ref<VectorXd> u,
-                    const int N,
                     const double kappa,
                     const double t0) {
+  const int N = u.rows();
   const double h = 1.0 / (N + 1);
   double x = h;
 
@@ -35,8 +35,8 @@ void fourierSquare (Ref<VectorXd> u,
 }
 
 void sineWave (Ref<VectorXd> u,
-               const int N,
                const int k) {
+  const int N = u.rows();
   const double h = 1.0 / (N + 1);
   double x = h;
 
@@ -47,10 +47,10 @@ void sineWave (Ref<VectorXd> u,
 }
 
 void sineWave (Ref<VectorXd> u,
-               const int N,
                const int k,
                const double kappa,
                const double t0) {
+  const int N = u.rows();
   const double h = 1.0 / (N + 1);
   double x = h;
 
