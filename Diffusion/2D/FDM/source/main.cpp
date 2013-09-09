@@ -12,16 +12,21 @@ using namespace std;
 
 
 int main() {
-  const int N          = 64;
-  const double delta_t = 5e-2;
-  const double kappa   = 0.0675;
+  const double mu    = 0.30;
+  const double kappa = 1.0;
+  const int N        = 64;
+  const double h     = 1.0 / (N + 1);
+  double delta_t = mu * h / kappa;
 
   VectorXd u (N * N);
-  squareWave (u, N);
+  VectorXd u1 (N * N);
+  squareWave (u1);
+  fourierSquare (u, kappa, delta_t);
 
-  backwardEuler (u, N, kappa, delta_t);
 
-  displayField (u, N);
+
+  crankNicolson (u, delta_t, h, kappa);
+  displayField (u);
 
   return 0;
 }

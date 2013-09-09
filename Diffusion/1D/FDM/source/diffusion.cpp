@@ -91,7 +91,7 @@ void BDF2 (Ref<VectorXd> u,
   const int N = u.rows();
 
   static MatrixXd B;
-  static LDLT<MatrixXd> Bp;
+  static LDLT<MatrixXd> Bdecomp;
   static int oldN;
   if (oldN != N) {
     double mu = delta_t * kappa / (h * h);
@@ -100,14 +100,14 @@ void BDF2 (Ref<VectorXd> u,
     A.diagonal (1) = A.diagonal (-1) = VectorXd::Constant (N - 1, -1);
     B = (MatrixXd::Identity(N, N) + 2.0 / 3.0 * mu * A);
     oldN = N;
-    Bp.compute(B);
+    Bdecomp.compute(B);
     oldN = N;
   }
 
   VectorXd rhs (N); rhs = u; rhs *= 4.0; rhs /= 3.0;
   VectorXd rhs1 (N); rhs1 = u1; rhs1 /= 3.0; rhs -= rhs1;
 
-  u = Bp.solve(rhs);
+  u = Bdecomp.solve (u, rhs);
 }
 
 void TR_BDF2 (Ref<VectorXd> u,
