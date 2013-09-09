@@ -10,9 +10,9 @@ using namespace Eigen;
 using namespace std;
 
 int main() {
-  const int N          = 64;
+  const int N          = 32;
   const double delta_t = 0.001;
-  Vector2d v           = {1.0, 1.0};
+  Vector2d v           = {3.0, 4.0};
 
   VectorXd u (N * N);
 
@@ -20,7 +20,7 @@ int main() {
 
   for (int i = 0; i < 10; ++i) {
     cerr << "timestep " << i << ":" << endl;
-    upwindMethod (u, N, v, delta_t);
+    frommVanLeer (u, N, v, delta_t);
   }
   
   displayField (u, N);

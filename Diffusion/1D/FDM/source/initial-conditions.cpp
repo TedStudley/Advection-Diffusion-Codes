@@ -5,23 +5,23 @@
 using namespace Eigen;
 
 
-void squareWave (Ref<VectorXd> u,
-                 const int N) {
-  const double h = 1.0 / N;
-  double x = h * 0.5;
+void squareWave (Ref<VectorXd> u) {
+  const int N = u.rows();
+  const double h = 1.0 / (N + 1);
+  double x = h;
 
-  for (int i = 0; i < int (N); ++i) {
+  for (int i = 0; i < N; ++i) {
     u[i] = (0.25 < x && x <= 0.75) ? 1 : 0;
     x += h;
   }
 }
 
 void fourierSquare (Ref<VectorXd> u,
-                    const int N,
                     const double kappa,
                     const double t0) {
-  const double h = 1.0 / N;
-  double x = h * 0.5;
+  const int N = u.rows();
+  const double h = 1.0 / (N + 1);
+  double x = h;
 
   VectorXd bk (N);  
   for (int k = 0; k < N; ++k)
@@ -34,3 +34,28 @@ void fourierSquare (Ref<VectorXd> u,
   }
 }
 
+void sineWave (Ref<VectorXd> u,
+               const int k) {
+  const int N = u.rows();
+  const double h = 1.0 / (N + 1);
+  double x = h;
+
+  for (int i = 0; i < N; ++i) {
+    u[i] = sin (k * M_PI * x);
+    x += h;
+  }
+}
+
+void sineWave (Ref<VectorXd> u,
+               const int k,
+               const double kappa,
+               const double t0) {
+  const int N = u.rows();
+  const double h = 1.0 / (N + 1);
+  double x = h;
+
+  for (int i = 0; i < N; ++i) {
+    u[i] = std::exp(-M_PI * M_PI * k * k * kappa * t0) * std::sin (k * M_PI * x);
+    x += h;
+  }
+}

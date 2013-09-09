@@ -5,9 +5,10 @@
 using namespace Eigen;
 
 
-void squareWave (Ref<VectorXd> u,
-                 const int N) {
+void squareWave (Ref<VectorXd> u) {
+  const int N = sqrt (u.rows ());
   const double h = 1.0 / (N + 1);
+
   Vector2d x = Vector2d::Constant (0.5 * h);
 
   for (int i = 0; i < N; ++i) {
@@ -22,8 +23,9 @@ void squareWave (Ref<VectorXd> u,
 }
 
 void fourierSquare (Ref<VectorXd> u,
-                    const int N,
+                    const double kappa,
                     const double t0) {
+  const int N = sqrt (u.rows ());
   const double h = 1.0 / (N + 1);
   Vector2d x = Vector2d::Constant (0.5 * h);
 
@@ -35,7 +37,7 @@ void fourierSquare (Ref<VectorXd> u,
       u[i * N + j] = 0;
       for (int k1 = 0; k1 < N; ++k1) {
         for (int k2 = 0; k2 < N; ++k2) {
-          u[i * N + j] += bk[k1] * bk[k2] * exp (-(k1 + 1) * (k1 + 1) * t0 * M_PI * M_PI) * exp (-(k2 + 1) * (k2 + 1) * t0 * M_PI * M_PI) * sin ((k1 + 1) * M_PI * x[0]) * sin ((k2 + 1) * M_PI * x[1]);
+          u[i * N + j] += bk[k1] * bk[k2] * exp (-(k1 + 1) * (k1 + 1) * kappa * t0 * M_PI * M_PI) * exp (-(k2 + 1) * (k2 + 1) * t0 * M_PI * M_PI) * sin ((k1 + 1) * M_PI * x[0]) * sin ((k2 + 1) * M_PI * x[1]);
         }
       }
       x[0] += h;
@@ -43,4 +45,3 @@ void fourierSquare (Ref<VectorXd> u,
     x[0] = 0.5 * h; x[1] += h;
   }
 }
-

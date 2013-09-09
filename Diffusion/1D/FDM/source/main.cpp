@@ -1,48 +1,73 @@
 #include <initial-conditions.h>
 #include <diffusion.h>
 #include <output.h>
+#include <norms.h>
 
 #include <Eigen/Dense>
 
-#include <fstream>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <sstream>
 
 using namespace Eigen;
 using namespace std;
 
 
 int main() {
-  const int N          = 1024;
-  const double t0      = 2.5e-5;
-  const double delta_t = 5e-4;
+  const double mu      = 0.4;
   const double kappa   = 1.0;
-  VectorXd utemp (N);
+  const double t0      = 0.0001;
+  const int k = 1;
   double t;
 
-  VectorXd u (N);
-  VectorXd u1 (N);
-  squareWave (u1, N);
-  fourierSquare (u, N, kappa, t0);
+  ofstream outstream;
+  string output_dir = "output/";
+  string file_prefix = "FE-";
+  stringstream filename;
 
-  ofstream initialOut ("initial.dat");
-  displayField (u, N, initialOut);
+  for (int N = 16; N <= 2048; N*=2) {
+    VectorXd u (N);
+    VectorXd u1 (N);
+    VectorXd utemp (N);
 
-  t = t0;
+    double h  = 1.0 / (N + 1);
+    double delta_t = mu * h / kappa;
 
-  for (int i = 0; i < 10; ++i) {
-    utemp = u;
-    BDF2 (u, u1, N, kappa, delta_t);
-    u1 = utemp;
-    t += delta_t;
+    squareWave (u1);
+    fourierSquare (u, kappa, t0);
+
+    t = t0;
+
+    for (int i = 0; t < 0.05; ++i) {
+      crankNicolson (u, delta_t, h, kappa);
+      t += delta_t;
+
+      if (i % 5 == 0) {
+        filename << output_dir << file_prefix 
+                 << setw (6) << setfill('0') << N << "-" 
+                 << setw (6) << setfill ('0') << i << ".dat";
+        outstream.open(filename.str().c_str());
+
+        displayField(u, outstream);
+        sineWave(utemp, k, kappa, t);
+        displayField(utemp, outstream);
+
+        filename.str(std::string());
+        outstream.close();
+      }
+
+    }
+
+    fourierSquare (u1, kappa, t);
+
+
+    VectorXd error = (u - u1);
+
+    cout << N << " " << maxNorm (u - u1) 
+         << " " << sqrt(error.array().square().sum()) / N << endl;
+
   }
-
-  fourierSquare (u1, N, kappa, t);
-
-  ofstream calculatedOut ("log");
-  ofstream exactOut ("exact.dat");
-
-  displayField (u, N, calculatedOut);
-  displayField (u1, N, exactOut);
 
   return 0;
 }

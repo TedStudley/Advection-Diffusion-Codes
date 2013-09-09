@@ -3,14 +3,14 @@ Introduction
 
 This code serves the purpose of modeling advection in one-dimensional temperature advection using the finite difference method. The purpose of this code is to provide a framework for testing very simple advection problems in few lines of code. For that purpose, this README document will serve as documentation for the functions used in this framework.
 
-This code uses the Eigen linear algebra library. Eigen can be downloaded [here](http://www.eigen.tuxfamily.org). Either install Eigen to your system include directory or directly into `Advection/1D/include`.
+This code uses the Eigen linear algebra library. Eigen can be downloaded [here](http://www.eigen.tuxfamily.org). Either install Eigen to your system include directory or directly into `Advection/2D/include`.
 
 Documentation
 =============
 
 Field Initialization
 --------------------
-These codes do not use a custom object for the temperature field, instead using the Eigen `VectorXd` vector object. To define `u` as the interval [0,1] with `N` subdivisions, use `VectorXd u (N)`. 
+These codes do not use a custom object for the temperature field, instead using the Eigen `VectorXd` vector object. To define `u` as the interval [0,1]^2 with `N` subdivisions in each direction, use `VectorXd u (N * N)`. 
 
 While h, the width of each cell, is calculated for you, N--the number of subdivisions in each dimension--is not. This is due to the fact that in higher dimensions, the number of subdivisions is not completely trivial to determine from the size of the vector. To that end, it is a good idea to either set N at compile-time with a `#define` statment or to set it in a constant variable at runtime.
 
@@ -38,7 +38,7 @@ Output
 ------
 Output is handled through the function `displayField`. There are two ways to call `displayField`, by either specifying an output stream, or simply sending the output to `stdout`. To send output to `stdout`, you may simply call `displayField (u, N)`, where `u` is the temperature field to display, and `N` is the number of subdivisions in each spatial direction. To send output to an arbitrary output stream, call `displayField (u, N, stream)`, where `u` and `N` are defined as before, and `stream` is the output stream to be written to.
 
-Included in the same folder as this README is the bash script `plotscript`. If your computer can run bash scripts and has gnuplot, you can run this script to automatically plot output files from advection-1d. Just run it using `./plotscript <input> <size> <output>` where `<input>` is your outputted data from advection-1d, `<size>` is the size of the input (`N` from inside advection-1d), and `<output>` is the file to output to. Currently, plotscript only outputs to vector graphics files, although it is trivial to change the output type by editing the script.
+Included in the same folder as this README is the bash script `plotscript`. If your computer can run bash scripts and has gnuplot, you can run this script to automatically plot output files from advection-1d. Just run it using `./plotscript <input> <size> <output>` where `<input>` is your outputted data from advection-2d, `<size>` is the size of the input (`N` from inside advection-2d), and `<output>` is the file to output to. Currently, plotscript only outputs to vector graphics files, although it is trivial to change the output type by editing the script.
 Function Quickreference
 =======================
 
@@ -89,11 +89,11 @@ A sample program to advect a square wave once around until it reaches the approx
 ```C++
 
 int main() {
-  const unsigned int N = 1024;
+  const unsigned int N = 64;
   const double delta_t = 0.0001;
   const double v       = 3.0;
 
-  VectorXd u (N);
+  VectorXd u (N * N);
   squareWave (u, N);
   for (int timestep = 0; timestep < 10000; ++timestep)
     frommMethod (u, N, kappa,  delta_t);
