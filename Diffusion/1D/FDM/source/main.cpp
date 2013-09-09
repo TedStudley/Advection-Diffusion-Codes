@@ -15,9 +15,10 @@ using namespace std;
 
 
 int main() {
-  const double mu      = 0.4;
+  const double mu      = 0.5;
   const double kappa   = 1.0;
   const double t0      = 0.0001;
+  const double T       = 0.10;
   const int k = 1;
   double t;
 
@@ -26,21 +27,23 @@ int main() {
   string file_prefix = "FE-";
   stringstream filename;
 
-  for (int N = 16; N <= 2048; N*=2) {
+  for (int N = 16; N <= 1024; N*=2) {
     VectorXd u (N);
     VectorXd u1 (N);
     VectorXd utemp (N);
 
     double h  = 1.0 / (N + 1);
-    double delta_t = mu * h / kappa;
+    double delta_t = 0.1 * mu * h / kappa;
 
-    squareWave (u1);
-    fourierSquare (u, kappa, t0);
+    sineWave (u1, k);
+    sineWave (u, k, kappa, delta_t);
 
-    t = t0;
+    t = delta_t;
 
-    for (int i = 0; t < 0.05; ++i) {
-      crankNicolson (u, delta_t, h, kappa);
+    for (int i = 0; t < T; ++i) {
+      utemp  = u;
+      BDF2 (u, u1, delta_t, h, kappa);
+      u1 = utemp;
       t += delta_t;
 
       if (i % 5 == 0) {
@@ -50,7 +53,7 @@ int main() {
         outstream.open(filename.str().c_str());
 
         displayField(u, outstream);
-        sineWave(utemp, k, kappa, t);
+        sineWave (utemp, k, kappa, t);
         displayField(utemp, outstream);
 
         filename.str(std::string());
@@ -59,8 +62,9 @@ int main() {
 
     }
 
-    fourierSquare (u1, kappa, t);
+    cerr << t << endl;
 
+    sineWave (u1, k, kappa, t);
 
     VectorXd error = (u - u1);
 

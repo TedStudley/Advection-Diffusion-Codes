@@ -62,7 +62,7 @@ void crankNicolson (Ref<VectorXd> u,
   
   static MatrixXd B;
   static MatrixXd A;
-  static LLT<MatrixXd> Bdecomp;
+  static LDLT<MatrixXd> Bdecomp;
   static double mu;
   static int oldN;
   if (oldN != N) {
@@ -99,7 +99,6 @@ void BDF2 (Ref<VectorXd> u,
     A.diagonal (0) = VectorXd::Constant (N, 2);
     A.diagonal (1) = A.diagonal (-1) = VectorXd::Constant (N - 1, -1);
     B = (MatrixXd::Identity(N, N) + 2.0 / 3.0 * mu * A);
-    oldN = N;
     Bdecomp.compute(B);
     oldN = N;
   }
@@ -107,7 +106,7 @@ void BDF2 (Ref<VectorXd> u,
   VectorXd rhs (N); rhs = u; rhs *= 4.0; rhs /= 3.0;
   VectorXd rhs1 (N); rhs1 = u1; rhs1 /= 3.0; rhs -= rhs1;
 
-  u = Bdecomp.solve (u, rhs);
+  u = Bdecomp.solve (rhs);
 }
 
 void TR_BDF2 (Ref<VectorXd> u,
