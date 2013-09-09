@@ -18,57 +18,40 @@ int main() {
   const double mu      = 0.5;
   const double kappa   = 1.0;
   const double t0      = 0.0001;
-  const double T       = 0.10;
+  const double T       = 0.1;
   const int k = 1;
   double t;
 
-  ofstream outstream;
-  string output_dir = "output/";
-  string file_prefix = "FE-";
-  stringstream filename;
-
-  for (int N = 16; N <= 1024; N*=2) {
+  for (int N = 16; N <= 8192; N*=2) {
     VectorXd u (N);
     VectorXd u1 (N);
     VectorXd utemp (N);
 
     double h  = 1.0 / (N + 1);
-    double delta_t = 0.1 * mu * h / kappa;
+    double delta_t = mu * h / kappa;
 
-    sineWave (u1, k);
-    sineWave (u, k, kappa, delta_t);
+    int N_timestep = T / delta_t;
+    if (abs (N_timestep * delta_t - T) > 10e-16) {
+      delta_t = T / (++N_timestep);
+    }
 
-    t = delta_t;
+    fourierSquare (u1, kappa, delta_t);
+    fourierSquare (u, kappa, 2 * delta_t);
+
+    t = 2 * delta_t;
 
     for (int i = 0; t < T; ++i) {
       utemp  = u;
       BDF2 (u, u1, delta_t, h, kappa);
       u1 = utemp;
       t += delta_t;
-
-      if (i % 5 == 0) {
-        filename << output_dir << file_prefix 
-                 << setw (6) << setfill('0') << N << "-" 
-                 << setw (6) << setfill ('0') << i << ".dat";
-        outstream.open(filename.str().c_str());
-
-        displayField(u, outstream);
-        sineWave (utemp, k, kappa, t);
-        displayField(utemp, outstream);
-
-        filename.str(std::string());
-        outstream.close();
-      }
-
     }
 
-    cerr << t << endl;
-
-    sineWave (u1, k, kappa, t);
+    fourierSquare (u1, kappa, t);
 
     VectorXd error = (u - u1);
 
-    cout << N << " " << maxNorm (u - u1) 
+    cerr << N << " " << maxNorm (u - u1) 
          << " " << sqrt(error.array().square().sum()) / N << endl;
 
   }

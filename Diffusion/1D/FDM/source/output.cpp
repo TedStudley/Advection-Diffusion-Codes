@@ -10,10 +10,10 @@ using namespace std;
 
 
 void displayField (VectorXd u) {
-  cout << u.transpose () << endl;
+  cout << u << endl;
 }
 
 void displayField (VectorXd u,
                    ofstream & stream) {
-  stream << u.transpose() << endl;
+  stream << u << endl;
 }  
