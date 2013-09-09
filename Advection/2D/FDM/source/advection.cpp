@@ -63,3 +63,4 @@ void frommVanLeer (Ref<VectorXd> u,
     cerr << "Warning! CFL conditin " << sigma << " > 1. Numerical stability is not guaranted." << endl;
 
   VectorXd u1 = u;
+}
