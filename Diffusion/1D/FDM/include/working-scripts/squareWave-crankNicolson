@@ -1,0 +1,25 @@
+{
+  VectorXd u (N);
+  VectorXd utemp (N);
+
+  double h       = 1.0 / (N + 1);
+  double delta_t = mu * h / kappa;
+  
+  init_timestep (delta_t, T);
+
+  squareWave (u);
+
+  t = delta_t;
+
+  for (int i = 0; t < T; ++i) {
+    crankNicolson (u, delta_t, h, kappa);
+    t += delta_t;
+  }
+
+  fourierSquare (utemp, kappa, t);
+
+  VectorXd error = (u - utemp);
+
+  cerr << N << " " << maxNorm (error)
+            << " " << twoNorm (error) << endl;
+}

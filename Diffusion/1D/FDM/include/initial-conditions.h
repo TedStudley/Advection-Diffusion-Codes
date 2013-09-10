@@ -4,6 +4,8 @@
 
 using namespace Eigen;
 
+
+
 void squareWave (Ref<VectorXd>);   // u
 
 void fourierSquare (Ref<VectorXd>,  // u
