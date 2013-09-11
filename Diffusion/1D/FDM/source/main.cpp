@@ -1,4 +1,4 @@
-#include <initial-conditions.h>
+  #include <initial-conditions.h>
 #include <diffusion.h>
 #include <utility.h>
 #include <output.h>
@@ -20,12 +20,10 @@ int main() {
   const double kappa   = 1.0;
   const double t0      = 0.0001;
   const double T       = 0.1;
-  const int N          = 256;
   const int k          = 1;
   double t             = 0.0;
 
-  for (int N = 16; N <= 8192; N *= 2) 
-  #include <working-scripts/sineWave-BDF2>
+  #include <working-scripts/OutputScripts/squareWave-backwardEuler>
 
   return 0;
 }

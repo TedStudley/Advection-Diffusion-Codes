@@ -25,11 +25,11 @@ void fourierSquare (Ref<VectorXd> u,
 
   VectorXd bk (N);  
   for (int k = 0; k < N; ++k)
-    bk[k] = 2.0 * (cos ((k + 1) * M_PI * 0.25) - cos ((k + 1) * M_PI * 0.75)) / ((k + 1) * M_PI);
+    bk[k] = 2.0 * (cos ((k + 1) * M_PI * 0.25) - cos ((k + 1) * M_PI * 0.75)) / ((k + 1) * M_PI) * exp (-(k + 1) * (k + 1) * kappa * t0 * M_PI * M_PI);
   for (int i = 0; i < N; ++i){
     u[i] = 0;
     for (int k = 0; k < N; ++k) 
-      u[i] += bk[k] * exp (-(k + 1) * (k + 1) * kappa * t0 * M_PI * M_PI) * sin ((k + 1) * M_PI * x);
+      u[i] += bk[k] * sin ((k + 1) * M_PI * x);
     x += h;
   }
 }

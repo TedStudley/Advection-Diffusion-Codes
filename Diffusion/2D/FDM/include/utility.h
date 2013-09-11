@@ -19,3 +19,11 @@ inline double periodicBC (Ref<VectorXd> u,
   if (i < 0) return periodicBC (u, N, i + N);
   else return u[i % N];
 }
+
+inline void init_timestep (double & delta_t, 
+                           const double end_t) {
+  int N_timestep = end_t / delta_t;
+  if (abs (N_timestep * delta_t - end_t) > 10e-16) {
+    delta_t = end_t / (++N_timestep);
+  }
+}

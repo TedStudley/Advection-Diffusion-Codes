@@ -4,7 +4,9 @@
 #define sign(x)        (x < 0) ? (-1) : 1
 #define mod(x, N)      (x + N) % N
 
-#include <iostream>
+#include <Eigen/Dense>
+
+using namespace Eigen;
 using namespace std;
 
 inline double periodicBC (Ref<VectorXd> u,

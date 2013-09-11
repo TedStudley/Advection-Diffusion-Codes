@@ -2,31 +2,26 @@
 #include <diffusion.h>
 #include <utility.h>
 #include <output.h>
+#include <norms.h>
 
 #include <Eigen/Dense>
 
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <sstream>
 
 using namespace Eigen;
 using namespace std;
 
-
 int main() {
-  const double mu    = 0.30;
+  const double mu    = 0.25;
   const double kappa = 1.0;
-  const int N        = 64;
-  const double h     = 1.0 / (N + 1);
-  double delta_t = mu * h / kappa;
+  const double t0    = 0.001;
+  const double T     = 0.1;
+  const int k        = 1;
 
-  VectorXd u (N * N);
-  VectorXd u1 (N * N);
-  squareWave (u1);
-  fourierSquare (u, kappa, delta_t);
-
-
-
-  crankNicolson (u, delta_t, h, kappa);
-  displayField (u);
-
+  for (int N = 16; N <= 128; N *= 2)
+  #include <working-scripts/squareWave-BDF2>
   return 0;
 }

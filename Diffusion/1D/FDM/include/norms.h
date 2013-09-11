@@ -2,9 +2,8 @@
 
 #include <Eigen/Dense>
 
-using namespace Eigen;
-using namespace std;
+double maxNorm (Eigen::VectorXd);
 
-double maxNorm (VectorXd);
+double oneNorm (Eigen::VectorXd);
 
-double twoNorm (VectorXd);
+double twoNorm (Eigen::VectorXd);

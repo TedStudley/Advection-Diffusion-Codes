@@ -1,0 +1,40 @@
+{
+  std::string outputDir = "Output/squareWave/backwardEuler/";
+  std::ofstream outFile;
+
+  int N           = 1024;
+  double h        = 1.0 / (N + 1);
+  double delta_t  = mu * h / kappa;
+
+  init_timestep (delta_t, T);
+
+  int stride = T / delta_t / 100;
+
+  std::cerr << stride << endl;
+
+  VectorXd u (N);
+  VectorXd utemp (N);
+
+  squareWave (u);
+
+  t = 0;
+
+  for (int i = 0; t < T; i++) {
+    backwardEuler (u, delta_t, h, kappa);
+    t += delta_t;
+    if (i % stride == 0) {
+      std::stringstream filename;
+      filename << outputDir << "output-" << setw (6) << setfill ('0') << i << ".dat";
+  
+      outFile.open (filename.str().c_str());
+    
+      displayField (u, outFile);
+    
+      outFile.close ();
+      
+      filename.str (std::string ());
+    }
+  }
+
+  fourierSquare (utemp, kappa, t);
+}

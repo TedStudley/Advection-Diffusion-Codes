@@ -53,7 +53,7 @@ void backwardEuler (Ref<VectorXd> u,
                     const double kappa) {
   const int N = sqrt(u.rows());
   static SparseMatrix<double> B;
-  static SimplicialLDLT<SparseMatrix<double>> Bdecomp;
+  static SimplicialLLT<SparseMatrix<double>> Bdecomp;
   static int oldN;
   if (oldN != N) {
     double mu = delta_t * kappa / (h * h);
@@ -90,14 +90,12 @@ void crankNicolson (Ref<VectorXd> u,
                     const double kappa) {
   const int N = sqrt(u.rows());
   static SparseMatrix<double> C;
-  static SimplicialLDLT<SparseMatrix<double>> Bdecomp;
+  static SimplicialLLT<SparseMatrix<double>> Bdecomp;
   static double mu;
   static int oldN;
   if (oldN != N) {
     mu = delta_t * kappa / (h * h);
-    if (mu > 0.25)
-      cerr << "CAUTION: If the computed solution oscillates, this could be because mu = "
-           << mu << " > 0.25" << endl;
+    
     vector<Triplet<double>> tripletList;
     tripletList.reserve (5 * N * N);
     tripletList.push_back (Triplet<double> (0, 0, -4 * mu));
@@ -138,7 +136,7 @@ void BDF2 (Ref<VectorXd> u,
            const double kappa) {
   const int N = sqrt(u.rows());
 
-  static SimplicialLDLT<SparseMatrix<double>> Bdecomp;
+  static SimplicialLLT<SparseMatrix<double>> Bdecomp;
   static int oldN;
   if (oldN != N) {
     double mu = delta_t * kappa / (h * h);
