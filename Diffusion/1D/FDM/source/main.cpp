@@ -23,7 +23,7 @@ int main() {
   const int k          = 1;
   double t             = 0.0;
 
-  #include <working-scripts/OutputScripts/squareWave-backwardEuler>
+  #include <working-scripts/OutputScripts/sineWave-crankNicolson>
 
   return 0;
 }

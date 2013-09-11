@@ -1,5 +1,5 @@
 {
-  std::string outputDir = "Output/squareWave/backwardEuler/";
+  std::string outputDir = "Output/fourierSquare/backwardEuler/";
   std::stringstream filename;
   std::ofstream outFile;
 
@@ -14,7 +14,7 @@
   VectorXd u (N);
   VectorXd utemp (N);
 
-  squareWave (u);
+  fourierSquare (u, kappa, t0);
 
   t = 0;
 

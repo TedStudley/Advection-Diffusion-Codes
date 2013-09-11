@@ -4,11 +4,11 @@ touch gnuplotScript.tmp
 
 echo "set term svg" >> gnuplotScript.tmp
 echo "set output \"$3\"" >> gnuplotScript.tmp
-echo "set xrange [0:1]" >> gnuplotScript.tmp
+echo "set xrange [0:$2]" >> gnuplotScript.tmp
+echo "set yrange [0:$2]" >> gnuplotScript.tmp
 echo "set object 1 rect from screen 0,0,0 to screen 1,1,0 behind" >> gnuplotScript.tmp
 echo "set object 1 rect fc rgb \"white\" fillstyle solid 1.0" >> gnuplotScript.tmp
-echo "set title \"FDM with BDF2 Solution of Diffusion Equation with Square Wave Initial Data\"" >> gnuplotScript.tmp
-echo "plot '$1' using ((\$0 + 1)/($2 + 1)):1 with lines title \"$2 gridpoints\"" >> gnuplotScript.tmp
+echo "splot '$1' matrix with lines" >> gnuplotScript.tmp
 
 gnuplot gnuplotScript.tmp
 

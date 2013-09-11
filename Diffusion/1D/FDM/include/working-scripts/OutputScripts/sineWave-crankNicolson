@@ -1,5 +1,5 @@
 {
-  std::string outputDir = "Output/squareWave/backwardEuler/";
+  std::string outputDir = "Output/sineWave/crankNicolson/";
   std::stringstream filename;
   std::ofstream outFile;
 
@@ -14,15 +14,15 @@
   VectorXd u (N);
   VectorXd utemp (N);
 
-  squareWave (u);
+  sineWave (u, k);
 
   t = 0;
 
   for (int i = 0; t < T; i++) {
-    backwardEuler (u, delta_t, h, kappa);
+    crankNicolson (u, delta_t, h, kappa);
     t += delta_t;
-  
-    if (i % stride == 0) {
+
+  if (i % stride == 0) {
       filename << outputDir << "output-" << setw (6) << setfill ('0') << i << ".dat";
       outFile.open (filename.str().c_str());
       displayField (u, outFile);
