@@ -4,12 +4,12 @@
 
   double h       = 1.0 / (N + 1);
   double delta_t = mu * h / kappa;
-  
+
   init_timestep (delta_t, T);
 
-  squareWave (u);
+  fourierSquare (u, kappa, t0);
 
-  t = 0;
+  t = t0;
 
   for (int i = 0; t < T; ++i) {
     forwardEuler (u, delta_t, h, kappa);
@@ -18,7 +18,7 @@
 
   fourierSquare (utemp, kappa, t);
 
-  VectorXd error = (u - utemp);
+  VectorXd error = u - utemp;
 
   cerr << N << " " << maxNorm (error)
             << " " << twoNorm (error) << endl;

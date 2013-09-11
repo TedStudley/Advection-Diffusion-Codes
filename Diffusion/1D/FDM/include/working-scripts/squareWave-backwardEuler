@@ -9,7 +9,7 @@
 
   squareWave (u);
 
-  t = delta_t;
+  t = 0;
 
   for (int i = 0; t < T; ++i) {
     backwardEuler (u, delta_t, h, kappa);

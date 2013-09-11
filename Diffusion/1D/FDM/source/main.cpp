@@ -18,11 +18,14 @@ using namespace std;
 int main() {
   const double mu      = 0.5;
   const double kappa   = 1.0;
+  const double t0      = 0.0001;
   const double T       = 0.1;
   const int N          = 256;
+  const int k          = 1;
   double t             = 0.0;
 
-  #include <working-scripts/squareWave-BDF2>
+  for (int N = 16; N <= 8192; N *= 2) 
+  #include <working-scripts/sineWave-BDF2>
 
   return 0;
 }

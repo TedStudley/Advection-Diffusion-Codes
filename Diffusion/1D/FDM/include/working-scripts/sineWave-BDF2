@@ -1,24 +1,28 @@
 {
   VectorXd u (N);
+  VectorXd u1 (N);
   VectorXd utemp (N);
 
   double h       = 1.0 / (N + 1);
   double delta_t = mu * h / kappa;
-  
+
   init_timestep (delta_t, T);
 
-  squareWave (u);
+  sineWave (u1, k);
+  sineWave (u, k, kappa, delta_t);
 
-  t = 0;
+  t = delta_t;
 
   for (int i = 0; t < T; ++i) {
-    forwardEuler (u, delta_t, h, kappa);
+    utemp = u;
+    BDF2 (u, u1, delta_t, h, kappa);
     t += delta_t;
+    u1 = utemp;
   }
 
-  fourierSquare (utemp, kappa, t);
+  sineWave (utemp, k, kappa, t);
 
-  VectorXd error = (u - utemp);
+  VectorXd error = u - utemp;
 
   cerr << N << " " << maxNorm (error)
             << " " << twoNorm (error) << endl;

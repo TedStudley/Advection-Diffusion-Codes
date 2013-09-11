@@ -19,9 +19,6 @@ void forwardEuler (Ref<VectorXd> u,
   static int oldN;
   if (oldN != N) {
     double mu = delta_t * kappa / (h * h);
-    if (mu > 0.5)
-      cerr << "CAUTION: If the computed solution oscillates, this could be because mu = " 
-           << mu << " < 0.5" << endl; 
     MatrixXd A = MatrixXd::Zero (N, N);
     A.diagonal (0) = VectorXd::Constant (N, 2);
     A.diagonal (-1) = A.diagonal (1) = VectorXd::Constant (N - 1, -1);
@@ -67,9 +64,6 @@ void crankNicolson (Ref<VectorXd> u,
   static int oldN;
   if (oldN != N) {
     mu = delta_t * kappa / (h * h);
-    if (mu > 0.5) 
-      cerr << "CAUTION: If the computed solution oscillates, this could be because mu = "
-           << mu << " > 0.5" << endl;
     A = MatrixXd::Zero (N, N);
     A.diagonal (0) = VectorXd::Constant (N, 2);
     A.diagonal (-1) = A.diagonal (1) = VectorXd::Constant (N - 1, -1);
