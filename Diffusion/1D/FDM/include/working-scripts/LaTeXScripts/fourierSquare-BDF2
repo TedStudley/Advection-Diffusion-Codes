@@ -10,6 +10,9 @@
     double delta_t = mu * h / kappa;
 
     init_timestep (delta_t, T);
+    if (delta_t > t0) t0 = delta_t;
+    // Set t0 to the maximum of t0 and delta_t to
+    // prevent under-resolution
 
     fourierSquare (u1, kappa, t0);
     fourierSquare (u, kappa, t0);

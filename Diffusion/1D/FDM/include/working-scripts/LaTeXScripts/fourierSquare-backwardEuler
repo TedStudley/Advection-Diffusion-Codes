@@ -9,7 +9,9 @@
     double delta_t = mu * h / kappa;
 
     init_timestep (delta_t, T);
-
+    if (delta_t > t0) t0 = delta_t;
+    // Prevent under-resolution
+    
     fourierSquare (u, kappa, t0);
 
     t = t0;

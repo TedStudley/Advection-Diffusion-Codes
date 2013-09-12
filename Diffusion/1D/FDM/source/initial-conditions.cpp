@@ -23,12 +23,15 @@ void fourierSquare (Ref<VectorXd> u,
   const double h = 1.0 / (N + 1);
   double x = h;
 
-  VectorXd bk (N);  
-  for (int k = 0; k < N; ++k)
+  int M = 300 / kappa;
+  if (N > M) M = N;
+
+  VectorXd bk (M);  
+  for (int k = 0; k < M; ++k)
     bk[k] = 2.0 * (cos ((k + 1) * M_PI * 0.25) - cos ((k + 1) * M_PI * 0.75)) / ((k + 1) * M_PI) * exp (-(k + 1) * (k + 1) * kappa * t0 * M_PI * M_PI);
   for (int i = 0; i < N; ++i){
     u[i] = 0;
-    for (int k = 0; k < N; ++k) 
+    for (int k = 0; k < M; ++k) 
       u[i] += bk[k] * sin ((k + 1) * M_PI * x);
     x += h;
   }

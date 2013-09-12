@@ -8,6 +8,7 @@
     double delta_t = mu * h / kappa;
 
     init_timestep (delta_t, T);
+    if (t0 < delta_t) t0 = delta_t;
 
     fourierSquare (u, kappa, t0);
 

@@ -11,5 +11,5 @@ double oneNorm (Eigen::VectorXd u) {
 }
 
 double twoNorm (Eigen::VectorXd u) {
-  return sqrt (u.array ().square ().sum ()) / u.rows ();
+  return sqrt (u.array ().square ().sum () / u.rows ());
 }

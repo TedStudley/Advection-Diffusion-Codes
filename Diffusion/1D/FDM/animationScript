@@ -10,7 +10,7 @@ do
 
   echo "set output '$filename'" >> gnuplotScript.tmp
   echo "set xrange [0:$2]" >> gnuplotScript.tmp
-  echo "set yrange [-0.1:1.1]" >> gnuplotScript.tmp
+#  echo "set yrange [-0.1:1.1]" >> gnuplotScript.tmp
   echo "plot '$i' with lines" >> gnuplotScript.tmp
   echo "reset" >> gnuplotScript.tmp
 done
@@ -19,6 +19,6 @@ gnuplot gnuplotScript.tmp
 
 rm gnuplotScript.tmp
 
-convert -delay 10 -loop 0 $1/*.png $3
+convert -delay 10 -loop 0 $1*.png $3
 
-rm -r ani-tmp
+rm -r $1*.png
