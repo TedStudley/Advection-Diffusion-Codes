@@ -24,7 +24,7 @@ int main() {
   double t             = 0.0;
   double t0            = 0.0001;
 
-  #include <working-scripts/LaTeXScripts/fourierSquare-crankNicolson>
+  #include <working-scripts/OutputScripts/sineWave-BDF2>
 
   return 0;
 }

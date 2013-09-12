@@ -3,13 +3,15 @@
   std::stringstream filename;
   std::ofstream outFile;
 
-  int N           = 1024;
+  system (("rm " + outputDir + "*.dat").c_str ());
+
   double h        = 1.0 / (N + 1);
   double delta_t  = mu * h / kappa;
 
   init_timestep (delta_t, T);
 
   int stride = T / delta_t / 100;
+  stride += ((stride == 0) ? 1 : 0);
 
   VectorXd u (N);
   VectorXd u1 (N);

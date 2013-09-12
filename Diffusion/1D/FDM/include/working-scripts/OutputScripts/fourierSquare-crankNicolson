@@ -3,6 +3,8 @@
   std::stringstream filename;
   std::ofstream outFile;
 
+  system (("rm " + outputDir + "*.dat").c_str ());
+
   double h        = 1.0 / (N + 1);
   double delta_t  = mu * h / kappa;
 

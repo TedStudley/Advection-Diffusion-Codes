@@ -1,17 +1,16 @@
 #! /bin/bash
 
-echo 'set terminal png' > gnuplotScript.tmp
-
-mkdir -p ani-tmp
+echo 'set term png size 800,600' > gnuplotScript.tmp
 
 for i in $1*.dat
 do
   filename=`echo $i | sed 's/dat/png/'`
 
   echo "set output '$filename'" >> gnuplotScript.tmp
-  echo "set xrange [0:$2]" >> gnuplotScript.tmp
-#  echo "set yrange [-0.1:1.1]" >> gnuplotScript.tmp
-  echo "plot '$i' with lines" >> gnuplotScript.tmp
+  echo "set xrange [0:1]" >> gnuplotScript.tmp
+  echo "set yrange [-0.1:1.1]" >> gnuplotScript.tmp
+  echo "set key off" >> gnuplotScript.tmp
+  echo "plot '$i' using (\$0/$2):1 with lines" >> gnuplotScript.tmp
   echo "reset" >> gnuplotScript.tmp
 done
 
