@@ -21,8 +21,8 @@ void crankNicolson (Ref<VectorXd>,  // u
                     const double,   // h
                     const double);  // kappa
 
-void BDF2 (Ref<VectorXd>,
-           Ref<VectorXd>,
-           const double,
-           const double,
-           const double);
+void BDF2 (Ref<VectorXd>, // u
+           Ref<VectorXd>, // u1
+           const double,  // delta_t
+           const double,  // h
+           const double); // kappa

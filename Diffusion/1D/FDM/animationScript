@@ -9,7 +9,7 @@ do
   echo "set output '$filename'" >> gnuplotScript.tmp
   echo "set xrange [0:1]" >> gnuplotScript.tmp
   echo "set yrange [-0.1:1.1]" >> gnuplotScript.tmp
-  echo "set key off" >> gnuplotScript.tmp
+#  echo "set key off" >> gnuplotScript.tmp
   echo "plot '$i' using (\$0/$2):1 with lines" >> gnuplotScript.tmp
   echo "reset" >> gnuplotScript.tmp
 done

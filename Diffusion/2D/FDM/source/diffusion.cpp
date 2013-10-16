@@ -136,7 +136,8 @@ void BDF2 (Ref<VectorXd> u,
            const double kappa) {
   const int N = sqrt(u.rows());
 
-  static SimplicialLLT<SparseMatrix<double>> Bdecomp;
+  static SimplicialLDLT<SparseMatrix<double>> BDecomp;
+
   static int oldN;
   if (oldN != N) {
     double mu = delta_t * kappa / (h * h);
@@ -156,16 +157,18 @@ void BDF2 (Ref<VectorXd> u,
 
     SparseMatrix<double> A (N * N, N * N);
     A.setFromTriplets (tripletList.begin (), tripletList.end ());
-    
+
     SparseMatrix<double> B (N * N, N * N);
     B.setIdentity ();
-    B += 2.0 / 3.0 * A;
-    Bdecomp.compute (B);
+    B -= 2.0 / 3.0 * A;
+    BDecomp.compute (B);
+
     oldN = N;
   }
 
-  VectorXd rhs (N * N); rhs = u; rhs *= 4.0; rhs /= 3.0;
-  VectorXd rhs1 (N * N); rhs1 = u1; rhs1 /= 3.0; rhs -= rhs1;
+  VectorXd rhs1 (N * N); rhs1 = u; rhs1 *= 4.0; rhs1 /= 3.0;
+  VectorXd rhs2 (N * N); rhs2 = u1; rhs2 /= 3.0; 
+  VectorXd rhs = rhs1 - rhs2;
 
-  u = Bdecomp.solve (rhs);
+  u = BDecomp.solve (rhs);
 }

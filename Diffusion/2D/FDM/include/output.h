@@ -4,11 +4,15 @@
 
 #include <fstream>
 
-using namespace Eigen;
-using namespace std;
 
+void displayField (Eigen::VectorXd);
 
-void displayField (VectorXd);
+void displayField (Eigen::VectorXd,
+                   std::ofstream &);
 
-void displayField (VectorXd,
-                   ofstream &);
+std::ofstream & openTeXDoc (std::string);
+
+void makeTeXRow (std::ofstream &,
+                 Eigen::VectorXd);
+
+void closeTeXDoc (std::ofstream &);

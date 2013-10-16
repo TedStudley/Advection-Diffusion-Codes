@@ -6,7 +6,7 @@
   system (("rm " + outputDir + "*.dat").c_str ());
 
   double h        = 1.0 / (N + 1);
-  double delta_t  = mu * h / kappa;
+  double delta_t  = mu * h * h / kappa;
 
   init_timestep (delta_t, T);
 
@@ -19,14 +19,17 @@
 
   squareWave (u1);
   squareWave (u);
-  backwardEuler (u, delta_t, h, kappa);
 
   t = delta_t;
 
   for (int i = 0; t < T; i++) {
-    utemp = u;
-    crankNicolson (u, delta_t, h, kappa);
-    u1 = utemp;
+    if (i > 0) {
+      utemp = u;
+      crankNicolson (u, delta_t, h, kappa);
+      u1 = utemp;
+    } else {
+      backwardEuler (u, delta_t, h, kappa);
+    }
     t += delta_t;
 
     if (i % stride == 0) {

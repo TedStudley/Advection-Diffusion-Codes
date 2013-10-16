@@ -6,7 +6,7 @@
   system (("rm " + outputDir + "*.dat").c_str ());
 
   double h        = 1.0 / (N + 1);
-  double delta_t  = mu * h / kappa;
+  double delta_t  = mu * h * h / kappa;
 
   init_timestep (delta_t, T);
 

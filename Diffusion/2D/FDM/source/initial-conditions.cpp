@@ -50,4 +50,30 @@ void sineWave (Ref<VectorXd> u,
                const int k) {
   const int N = sqrt (u.rows ());
   const double h = 1.0 / (N + 1);
+  Vector2d x = Vector2d::Constant (h);
+
+  for (int i = 0; i < N; ++i) {
+    for (int j = 0; j < N; ++j) {
+      u[i * N + j] = std::sin (k * M_PI * x[0]) * std::sin (k * M_PI * x[1]);
+      x[0] += h;
+    }
+    x[0] = h; x[1] += h;
+  }
+}
+
+void sineWave (Ref<VectorXd> u,
+               const int k,
+               const double kappa,
+               const double t0) {
+  const int N = sqrt (u.rows ());
+  const double h = 1.0 / (N + 1);
+  Vector2d x = Vector2d::Constant (h);
+
+  for (int i = 0; i < N; ++i) {
+    for (int j = 0; j < N; ++j) {
+      u[i * N + j] = std::exp (-2 * M_PI * M_PI * k * k * kappa * t0)  * std::sin (k * M_PI * x[0]) * std::sin (k * M_PI * x[1]);
+      x[0] += h;
+    }
+    x[0] = h; x[1] += h;
+  }
 }

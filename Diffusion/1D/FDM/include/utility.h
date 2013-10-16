@@ -6,10 +6,12 @@
 
 #include <Eigen/Dense>
 
+#include <iostream>
+
 using namespace Eigen;
 using namespace std;
 
-inline double periodicBC (Ref<VectorXd> u,
+inline double periodicBC (Eigen::Ref<Eigen::VectorXd> u,
                           unsigned int N,
                           int i) {
   if (i < 0) return periodicBC (u, N, i + N);
@@ -22,4 +24,30 @@ inline void init_timestep (double & delta_t,
   if (abs (N_timestep * delta_t - end_t) > 10e-16) {
     delta_t = end_t / (++N_timestep);
   }
+}
+
+inline void monotonicityCheck (Eigen::VectorXd u,
+                               const double lower = 0.0,
+                               const double upper = 1.0) {
+  static double old_lower;
+  static double old_upper;
+
+  static bool next_step;
+  if (!next_step) {
+    old_lower = lower;
+    old_upper = upper;
+    next_step = true;
+  }
+
+  double new_lower = u.minCoeff ();
+  double new_upper = u.maxCoeff ();
+
+  if (new_lower < old_lower || new_upper > old_upper) {
+    std::cerr << "Monotonicity not preserved!" << std::endl
+              << "\tlower: " << old_lower << " -> " << new_lower << std::endl
+              << "\tupper: " << old_upper << " -> " << new_upper << std::endl;
+  }
+
+  old_lower = new_lower;
+  old_upper = new_upper;
 }

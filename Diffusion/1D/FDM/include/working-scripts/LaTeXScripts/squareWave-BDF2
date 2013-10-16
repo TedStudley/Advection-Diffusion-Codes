@@ -12,7 +12,14 @@
 
     squareWave (u1);
     squareWave (u);
-    backwardEuler (u, delta_t, h, kappa);
+    
+    double temp_dt = delta_t / 32;
+    backwardEuler (u, temp_dt, h, kappa);
+    t = temp_dt;
+    for (;t < delta_t; temp_dt *= 2) {
+      BDF2 (u, u1, delta_t, h, kappa);
+      t += temp_dt;
+    }
 
     t = delta_t;
 

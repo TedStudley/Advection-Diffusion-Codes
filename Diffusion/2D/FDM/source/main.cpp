@@ -15,13 +15,14 @@ using namespace Eigen;
 using namespace std;
 
 int main() {
-  const double mu    = 0.25;
+  const double mu    = 2.0;
   const double kappa = 1.0;
-  const double t0    = 0.001;
-  const double T     = 0.1;
+  const double T     = 1.0;
+  double t           = 0.0;
   const int k        = 1;
+  int N              = 64;
 
-  for (int N = 16; N <= 128; N *= 2)
-  #include <working-scripts/squareWave-BDF2>
+  #include <working-scripts/OutputScripts/squareWave-bdf2> 
+
   return 0;
 }

@@ -7,10 +7,11 @@ echo "set xrange [0:1]" >> gnuplotScript.tmp
 echo "set yrange [0:1]" >> gnuplotScript.tmp
 echo "set zrange [-0.1:1.1]" >> gnuplotScript.tmp
 echo "set xyplane at 0" >> gnuplotScript.tmp
+echo "set hidden3d" >> gnuplotScript.tmp
 echo "set object 1 rect from screen 0,0,0 to screen 1,1,0 behind" >> gnuplotScript.tmp
 echo "set object 1 rect fc rgb \"white\" fillstyle solid 1.0" >> gnuplotScript.tmp
 echo "set title \"\"" >> gnuplotScript.tmp
-echo "splot '$1' matrix using (\$1/$2+0.5/$2):(\$2/$2+0.5/$2):3 with lines title \"$2 gridpoints\"" >> gnuplotScript.tmp
+echo "splot '$1' matrix using (\$1/$2+0.5/$2):(\$2/$2+0.5/$2):3 with lines title \"\"" >> gnuplotScript.tmp
 
 gnuplot gnuplotScript.tmp
 

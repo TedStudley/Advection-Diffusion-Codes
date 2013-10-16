@@ -1,7 +1,0 @@
-set term x11
-set xrange [0:1]
-set yrange [0:1]
-set zrange [-0.1:1.1]
-set xyplane at 0
-set title ""
-splot 'log' matrix using ($1/64+0.5/64):($2/64+0.5/64):3 with lines title "64 gridpoints"

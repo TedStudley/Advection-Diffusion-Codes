@@ -1,4 +1,6 @@
-  #include <initial-conditions.h>
+#define CHECK_MONOTONICITY false
+
+#include <initial-conditions.h>
 #include <diffusion.h>
 #include <utility.h>
 #include <output.h>
@@ -16,15 +18,15 @@ using namespace std;
 
 
 int main() {
-  const double mu      = 0.5;
+  const double mu      = 1.0;
   const double kappa   = 1.0;
-  const double T       = 0.1;
+  const double T       = 1.0;
   const int k          = 1;
-  int N                = 1024;
+  int N                = 512;
   double t             = 0.0;
-  double t0            = 0.0001;
+  double t0            = 0;
 
-  #include <working-scripts/OutputScripts/sineWave-BDF2>
+  #include <working-scripts/LaTeXScripts/squareWave-BDF2>
 
   return 0;
 }

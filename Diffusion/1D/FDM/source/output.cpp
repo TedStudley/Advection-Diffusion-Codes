@@ -17,7 +17,10 @@ void displayField (Eigen::VectorXd u,
 }
 
 std::ofstream & openTeXDoc (std::string filename) {
-  static std::ofstream stream (filename.c_str(), std::ofstream::out | std::ofstream::trunc);
+  std::ofstream * stream_ptr = new std::ofstream;
+  std::ofstream & stream = *stream_ptr;
+  stream.open (filename.c_str(), std::ofstream::out | std::ofstream::trunc);
+
   stream << "\\documentclass[12pt]{article}" << std::endl
          << "\\begin{document}" << std::endl;
   stream << "\t\\begin{tabular}{l|c|c|c|c|c|c}" << std::endl
