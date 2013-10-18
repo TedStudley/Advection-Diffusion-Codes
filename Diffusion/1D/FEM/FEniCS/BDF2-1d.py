@@ -7,6 +7,9 @@ from initialConditions import *
 from utility import *
 
 N = 256
+
+l1_old = l2_old = linf_old = 1
+
 while (N <= 8192):
   mu      = 1.0
   kappa   = 1.0
@@ -20,9 +23,10 @@ while (N <= 8192):
   V = FunctionSpace(mesh, 'Lagrange', 2)
 
   u2 = sineWave(kappa, 0)
-  # u2 = squareWave()
+  #u2 = squareWave()
   u1 = sineWave(kappa, 0)
-  # u1 = squareWave()
+  #u1 = squareWave()
+
 
   bc = DirichletBC(V, Constant(0.0), boundary)
 
@@ -32,20 +36,19 @@ while (N <= 8192):
   u = TrialFunction(V)
   v = TestFunction(V)
 
-  dt_temp = dt
-  a = u*v*dx + kappa * dt_temp * inner(nabla_grad(v), nabla_grad(u)) * dx
+  a = v*u*dx + kappa*dt*inner(nabla_grad(v), nabla_grad(u))*dx
   A = assemble(a)
   u = Function(V)
-  L = u_1*v*dx
+  L = v*u_1*dx
   b = assemble(L)
   bc.apply(A, b)
   solve(A, u.vector(), b)
   u_1.assign(u)
-  t = dt_temp
+
+  t = dt
 
   u = TrialFunction(V)
 
-  u = TrialFunction(V)
   a = v*u*dx + 2.0/3.0*kappa*dt*inner(nabla_grad(v), nabla_grad(u))*dx
   A = assemble(a)
   u = Function(V)
@@ -66,5 +69,13 @@ while (N <= 8192):
 
   u_error = u_1.vector() - u_exact.vector()
 
-  print "N: ", N, " L2: ", u_error.norm("l2")/N, " L1: ", u_error.norm("l1")/N, " Linf: ", u_error.norm("linf")
+  l1   = u_error.norm('l1') / N
+  l2   = u_error.norm('l2') / sqrt(N)
+  linf = u_error.norm('linf')
+
+  print "N: {}\tL1: {:.6e}\t{:.2f}\tL2: {:.6e}\t{:.2f}\tLinf: {:.6e}\t{:.2f}".format(N, l1, numpy.log2(l1_old/l1), l2, numpy.log2(l2_old/l2), linf, numpy.log2(linf_old/linf))
+
+  l1_old   = l1
+  l2_old   = l2
+  linf_old = linf
   N *= 2

@@ -10,12 +10,12 @@ using namespace Eigen;
 using namespace std;
 
 void upwindMethod (Ref<VectorXd> u,
-                   const int N,
-                   const Vector2d v,
-                   const double delta_t) {
-  const double h     = 1.0 / (N + 1),
-               sigma_x = v[0] * delta_t / h,
-               sigma_y = v[1] * delta_t / h;
+                   const double delta_t,
+                   const double h,
+                   const Vector2d v) {
+  const int N = sqrt (u.rows ());
+  const double sigma_x = v[0] * delta_t / h;
+  const double sigma_y = v[1] * delta_t / h;
 
   VectorXd u1 = u;
   for (int i = 0; i < N; ++i) 
@@ -24,12 +24,12 @@ void upwindMethod (Ref<VectorXd> u,
 }
 
 void frommMethod (Ref<VectorXd> u,
-                  const int N,
-                  const Vector2d v,
-                  const double delta_t) {
-  const double h       = 1.0 / (N + 1),
-               sigma_x = v[0] * delta_t / h,
-               sigma_y = v[1] * delta_t / h;
+                  const double delta_t,
+                  const double h,
+                  const Vector2d v) {
+  const int N = sqrt (u.rows ());
+  const double sigma_x = v[0] * delta_t / h;
+  const double sigma_y = v[1] * delta_t / h;
 
   VectorXd u1 = u;
   for (int i = 0; i < N; ++i) 
@@ -43,12 +43,12 @@ void frommMethod (Ref<VectorXd> u,
 }
 
 void frommVanLeer (Ref<VectorXd> u,
-                   const int N,
-                   const Vector2d v,
-                   const double delta_t) {
-  const double h       = 1.0 / (N + 1),
-               sigma_x = v[0] * delta_t / h,
-               sigma_y = v[1] * delta_t / h;
+                   const double delta_t,
+                   const double h,
+                   const Vector2d v) {
+  const int N = sqrt (u.rows ());
+  const double sigma_x = v[0] * delta_t / h;
+  const double sigma_y = v[1] * delta_t / h;
 
   VectorXd u1 = u;
   for (int i = 0; i < N; ++i) {

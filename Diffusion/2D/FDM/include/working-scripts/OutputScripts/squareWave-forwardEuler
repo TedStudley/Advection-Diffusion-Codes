@@ -1,37 +1,29 @@
 {
-  std::string outputDir = "Output/squareWave/BDF2/";
+  std::string outputDir = "Output/squareWave/forwardEuler/";
   std::stringstream filename;
   std::ofstream outFile;
 
-  system (("rm " + outputDir + "*.dat").c_str ());
+  system (("rm " + outputDir + "*.dat").c_str());
 
   double h        = 1.0 / (N + 1);
   double delta_t  = mu * h * h / kappa;
 
   init_timestep (delta_t, T);
 
-  int stride = T / delta_t / 100;
+  int stride = (T / delta_t) / 100;
   stride += ((stride == 0) ? 1 : 0);
 
-  VectorXd u (N);
-  VectorXd u1 (N);
-  VectorXd utemp (N);
+  VectorXd u (N * N);
+  VectorXd utemp (N * N);
 
-  squareWave (u1);
   squareWave (u);
 
-  t = delta_t;
+  t = 0;
 
   for (int i = 0; t < T; i++) {
-    if (i > 0) {
-      utemp = u;
-      crankNicolson (u, delta_t, h, kappa);
-      u1 = utemp;
-    } else {
-      backwardEuler (u, delta_t, h, kappa);
-    }
+    forwardEuler (u, delta_t, h, kappa);
     t += delta_t;
-
+  
     if (i % stride == 0) {
       filename << outputDir << "output-" << setw (6) << setfill ('0') << i << ".dat";
       outFile.open (filename.str().c_str());

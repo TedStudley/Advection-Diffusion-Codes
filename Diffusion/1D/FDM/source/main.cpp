@@ -18,15 +18,15 @@ using namespace std;
 
 
 int main() {
+  int N                = 512;
   const double mu      = 1.0;
   const double kappa   = 1.0;
   const double T       = 1.0;
   const int k          = 1;
-  int N                = 512;
   double t             = 0.0;
   double t0            = 0;
 
-  #include <working-scripts/LaTeXScripts/squareWave-BDF2>
+  #include <working-scripts/OutputScripts/squareWave-BDF2>
 
   return 0;
 }
