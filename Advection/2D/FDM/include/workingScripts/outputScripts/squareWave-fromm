@@ -1,5 +1,5 @@
 {
-  std::string outputDir = "output/squareWave/fvl/";
+  std::string outputDir = "output/squareWave/fromm/";
   std::stringstream filename;
   std::ofstream outFile;
 
@@ -23,7 +23,7 @@
 
   for (int i = 0; t < T; ++i) {
     std::cerr << "==> Step " << i << " (t=" << t << ")\n";
-    frommVanLeer (u, dt, h, v);
+    frommMethod (u, dt, h, v);
     t += dt;
 
     if (i % stride == 0) {

@@ -1,5 +1,5 @@
 {
-  std::string outputDir = "output/squareWave/fvl/";
+  std::string outputDir = "output/sineWave/fvl/";
   std::stringstream filename;
   std::ofstream outFile;
 
@@ -15,7 +15,7 @@
 
   VectorXd u (N * N);
 
-  squareWave (u);
+  sineWave (u, 2, 2);
 
   double t = t0;
 

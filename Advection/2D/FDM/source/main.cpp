@@ -15,7 +15,7 @@ using namespace Eigen;
 using namespace std;
 
 int main() {
-  int N                = 64;
+  int N                = 32;
   const double mu      = 1.0;
   const double kappa   = 1.0;
   Vector2d v           = {1.0, 0.0};
@@ -23,7 +23,7 @@ int main() {
   const int k          = 2;
   double t0            = 0.0;
 
-  #include "workingScripts/outputScripts/squareWave-FVL"
+  #include "workingScripts/outputScripts/sineWave-fromm"
 
   return 0;
 }

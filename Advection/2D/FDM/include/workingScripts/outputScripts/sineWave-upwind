@@ -1,5 +1,5 @@
 {
-  std::string outputDir = "output/squareWave/fvl/";
+  std::string outputDir = "output/sineWave/upwind/";
   std::stringstream filename;
   std::ofstream outFile;
 
@@ -15,7 +15,7 @@
 
   VectorXd u (N * N);
 
-  squareWave (u);
+  sineWave (u, 2, 2);
 
   double t = t0;
 
@@ -23,7 +23,7 @@
 
   for (int i = 0; t < T; ++i) {
     std::cerr << "==> Step " << i << " (t=" << t << ")\n";
-    frommVanLeer (u, dt, h, v);
+    upwindMethod (u, dt, h, v);
     t += dt;
 
     if (i % stride == 0) {

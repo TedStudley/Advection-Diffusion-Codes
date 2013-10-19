@@ -11,3 +11,9 @@ void displayField (VectorXd);
 
 void displayField (VectorXd,
                    ofstream &);
+
+void outputStats (const int,
+                  const double,
+                  const double,
+                  const int,
+                  const double);

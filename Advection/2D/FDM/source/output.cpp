@@ -21,3 +21,16 @@ void displayField (VectorXd u,
   for (int i = 0; i < N; ++i)
     stream << u.segment(i * N, N).transpose() << endl;
 }
+
+void outputStats (const int N,
+                  const double h,
+                  const double dt,
+                  const int stride,
+                  const double T) {
+  std::cerr << "==> Run statistics:" << endl
+            << "====> Subdivisions (N)       = " << N << endl
+            << "====> Timestep (dt)          = " << dt << endl
+            << "====> Output stride (stride) = " << stride << endl
+            << "====> End time (T)           = " << T << endl << endl;
+}
+
