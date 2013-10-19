@@ -7,9 +7,7 @@
 using namespace Eigen;
 using namespace std;
 
-void displayField (VectorXd,
-                   const int);
+void displayField (VectorXd);
 
 void displayField (VectorXd,
-                   const int,
                    ofstream &);

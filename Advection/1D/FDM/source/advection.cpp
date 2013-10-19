@@ -10,9 +10,9 @@ using namespace Eigen;
 using namespace std;
 
 void upwindMethod (Ref<VectorXd> u,
-                   unsigned int N,
-                   double v,
-                   double delta_t) {
+                   const int N,
+                   const double v,
+                   const double delta_t) {
   const double h     = 1.0 / (N + 1),
                sigma = v * delta_t / h;
 

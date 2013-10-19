@@ -7,6 +7,9 @@ from initialConditions import *
 from utility import *
 
 N = 256
+
+l1_old = l2_old = linf_old = 1
+
 while (N <= 8192):
   mu      = 1.0
   kappa   = 1.0
@@ -54,5 +57,13 @@ while (N <= 8192):
 
   u_error = u_1.vector() - u_exact.vector()
 
-  print "N: ", N, " L2: ", u_error.norm("l2")/sqrt(N), " L1: ", u_error.norm("l1")/N, " Linf: ", u_error.norm("linf")
+  l1   = u_error.norm('l1') / N
+  l2   = u_error.norm('l2') / sqrt(N)
+  linf = u_error.norm('linf')
+
+  print "N: {}\tL1: {:.6e}\t{:.2f}\tL2: {:.6e}\t{:.2f}\tLinf: {:.6e}\t{:.2f}".format(N, l1, numpy.log2(l1_old/l1), l2, numpy.log2(l2_old/l2), linf, numpy.log2(linf_old/linf))
+
+  l1_old   = l1
+  l2_old   = l2
+  linf_old = linf
   N *= 2
