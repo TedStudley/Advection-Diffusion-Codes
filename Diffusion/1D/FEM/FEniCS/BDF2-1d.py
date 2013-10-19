@@ -17,12 +17,12 @@ while (N <= 8192):
   dt = mu *  h / kappa
 
   mesh = UnitIntervalMesh(N)
-  V = FunctionSpace(mesh, 'Lagrange', 2)
+  V = FunctionSpace(mesh, 'Lagrange', 1)
 
-  u2 = sineWave(kappa, 0)
-  # u2 = squareWave()
-  u1 = sineWave(kappa, 0)
-  # u1 = squareWave()
+  # u2 = sineWave(kappa, 0)
+  u2 = fourierSquare(N, kappa, dt)
+  # u1 = sineWave(kappa, 0)
+  u1 = fourierSquare(N, kappa, 2*dt)
 
   bc = DirichletBC(V, Constant(0.0), boundary)
 
@@ -32,20 +32,8 @@ while (N <= 8192):
   u = TrialFunction(V)
   v = TestFunction(V)
 
-  dt_temp = dt
-  a = u*v*dx + kappa * dt_temp * inner(nabla_grad(v), nabla_grad(u)) * dx
-  A = assemble(a)
-  u = Function(V)
-  L = u_1*v*dx
-  b = assemble(L)
-  bc.apply(A, b)
-  solve(A, u.vector(), b)
-  u_1.assign(u)
-  t = dt_temp
+  t = 2*dt
 
-  u = TrialFunction(V)
-
-  u = TrialFunction(V)
   a = v*u*dx + 2.0/3.0*kappa*dt*inner(nabla_grad(v), nabla_grad(u))*dx
   A = assemble(a)
   u = Function(V)
@@ -61,10 +49,10 @@ while (N <= 8192):
 
   M = min(N, 300)
 
-  u_exact = interpolate(sineWave(kappa, t), V)
-  # u_exact = interpolate(fourierSquare(M, kappa, t), V)
+  # u_exact = interpolate(sineWave(kappa, t), V)
+  u_exact = interpolate(fourierSquare(M, kappa, t), V)
 
   u_error = u_1.vector() - u_exact.vector()
 
-  print "N: ", N, " L2: ", u_error.norm("l2")/N, " L1: ", u_error.norm("l1")/N, " Linf: ", u_error.norm("linf")
+  print "N: ", N, " L2: ", u_error.norm("l2")/sqrt(N), " L1: ", u_error.norm("l1")/N, " Linf: ", u_error.norm("linf")
   N *= 2
