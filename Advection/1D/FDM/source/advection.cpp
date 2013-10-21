@@ -10,30 +10,26 @@ using namespace Eigen;
 using namespace std;
 
 void upwindMethod (Ref<VectorXd> u,
-                   const int N,
-                   const double v,
-                   const double delta_t) {
-  const double h     = 1.0 / (N + 1),
-               sigma = v * delta_t / h;
-
-  if (sigma > 1) 
-    cerr << "Warning! CFL condition " << sigma << " > 1. Numerical stability is not guaranteed." << endl;
+                   const double dt,
+                   const double h,
+                   const VectorXd v) {
+  const int N     = u.rows ();
+  double    sigmaL;
+  double    sigmaR;
 
   VectorXd u1 = u;
-  for (int i = 0; i < int (N); ++i) { 
-    u[i] = bc(u1, N, i) + sigma * ( bc(u1, N, i - 1) - bc(u1, N, i));
+  for (int i = 0; i < int (N); ++i) {
+    sigmaR = sigmaL = 0;
+    u[i] = bc(u1, N, i) - 1 / h * (v[0] * dt * (bc(u1, N, i) - bc(u1, N, i-1)) + (v[0] * h / 2 * h - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
   }
 }
 
 void frommMethod (Ref<VectorXd> u,
-                  const int N,
-                  const double v,
-                  const double delta_t) {
-  const double h     = 1.0 / (N + 1);
-        double sigma = v * delta_t / h;
-
-  if (sigma > 1)
-    cerr << "Warning! CFL condition " << sigma << " > 1. Numerical stability is not guaranteed." << endl;
+                  const double delta_t,
+                  const double h,
+                  const VectorXd v) {
+  const int    N     = u.rows ();
+  const double sigma = v[0] * delta_t / h;
 
   VectorXd u1 = u;
   for (int i = 0; i < int (N); ++i) 
@@ -43,14 +39,14 @@ void frommMethod (Ref<VectorXd> u,
 }
 
 
-void frommVanLeer (Ref<VectorXd> u, 
-                   const int N,
-                   const double v,
-                   const double delta_t) {
+void frommVanLeer (Ref<VectorXd> u,
+                   const double delta_t,
+                   const double h,
+                   const VectorXd v) {
   double thetaL, thetaR, phiL, phiR, VLDeltaL, VLDeltaR, fluxL, fluxR;
   
-  const double h     = 1.0 / (N + 1),
-               sigma = v * delta_t / h;
+  const int    N     = u.rows ();
+  const double sigma = v[0] * delta_t / h;
 
   VectorXd u1 = u;
   for (int i = 0; i < N; ++i) {

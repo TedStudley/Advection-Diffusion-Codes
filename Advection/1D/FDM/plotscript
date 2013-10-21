@@ -1,13 +1,13 @@
 #!/bin/bash
 
 touch gnuplotScript.tmp
-echo "set term pdf" >> gnuplotScript.tmp
+echo "set term svg" >> gnuplotScript.tmp
 echo "set output \"$3\"" >> gnuplotScript.tmp
-echo "set xrange [0:$2]" >> gnuplotScript.tmp
-echo "set yrange [-0.1:1.1]" >> gnuplotScript.tmp
+echo "set xrange [0:1]" >> gnuplotScript.tmp
+echo "set yrange [-1.1:1.1]" >> gnuplotScript.tmp
 echo "set object 1 rect from screen 0,0,0 to screen 1,1,0 behind" >> gnuplotScript.tmp
 echo "set object 1 rect fc rgb \"white\" fillstyle solid 1.0" >> gnuplotScript.tmp
-echo "plot '$1' matrix with lines" >> gnuplotScript.tmp
+echo "plot '$1' using (\$0/$2+1/$2):1 with lines title \"\"" >> gnuplotScript.tmp
 
 gnuplot gnuplotScript.tmp
 

@@ -5,19 +5,16 @@
 using namespace Eigen;
 
 void upwindMethod (Ref<VectorXd>,   // u
-                   const int,       // N
-                   const double,    // v
-                   const double     // delta_t
-                  );
+                   const double,    // delta_t
+                   const double,    // h
+                   const VectorXd); // v
 
 void frommMethod (Ref<VectorXd>,    // u
-                  const int,        // N
-                  const double,     // v
-                  const double      // delta_t
-                 );
+                  const double,     // delta_t
+                  const double,     // h
+                  const VectorXd);  // v
 
 void frommVanLeer (Ref<VectorXd>,   // u
-                   const int,       // N
-                   const double,    // v
-                   const double     // delta_t
-                  );
+                   const double,    // delta_t
+                   const double,    // h
+                   const VectorXd); // v

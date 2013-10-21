@@ -1,3 +1,6 @@
+#include <initial-conditions.h>
+#include <utility.h>
+
 #include <cmath>
 
 #include <Eigen/Dense>
@@ -5,33 +8,62 @@
 using namespace Eigen;
 
 
-void squareWave (Ref<VectorXd> u,
-                 const int N) {
+void squareWave (Ref<VectorXd> u) {
+  const int    N = u.rows ();
   const double h = 1.0 / (N + 1);
-  double x = 0.5 * h;
+  Vector1d x = Vector1d::Constant (h);
 
-  for (int i = 0; i < int (N); ++i) {
-    u[i] = (0.25 < x && x <= 0.75) ? 1 : 0;
-    x += h;
+  for (int i = 0; i < N; ++i) {
+    u[i] = (0.25 < x[0] && x[0] <= 0.75) ? 1 : 0;
+    x[0] += h;
   }
 }
 
 void fourierSquare (Ref<VectorXd> u,
-                    const int N,
+                    const double kappa,
                     const double t0) {
+  const int    N = u.rows ();
   const double h = 1.0 / (N + 1);
-  double x = 0.5 * h;
+  Vector1d     x = Vector1d::Constant (h);
 
-  unsigned int M = N / 2;
+  int M = 300;
+  if (N < M) M = N;
 
-  VectorXd bk (M);  
+  VectorXd bk (M); 
   for (int k = 0; k < int (M); ++k)
-    bk[k] = 2.0 * (cos ((k + 1) * M_PI * 0.25) - cos ((k + 1) * M_PI * 0.75)) / ((k + 1) * M_PI);
+    bk[k] = 2.0 * (cos ((k + 1) * M_PI * 0.25) - cos ((k + 1) * M_PI * 0.75)) / ((k + 1) * M_PI) * exp (-(k + 1) * (k + 1) * kappa * t0 * M_PI * M_PI);
   for (int i = 0; i < int (N); ++i){
     u[i] = 0;
     for (int k = 0; k < int (M); ++k) 
-      u[i] += bk[k] * exp (-(k + 1) * (k + 1) * t0 * M_PI) * sin ((k + 1) * M_PI * x);
-    x += h;
+      u[i] += bk[k] * sin ((k + 1) * M_PI * x[0]);
+    x[0] += h;
   }
 }
+
+void sineWave (Ref<VectorXd> u,
+               const int k) {
+  const int    N = u.rows ();
+  const double h = 1.0 / (N + 1);
+  Vector1d x = Vector1d::Constant (h);
+
+  for (int i = 0; i < N; ++i) {
+    u[i] = sin (k * M_PI * x[0]);
+    x[0] += h;
+  }
+}
+
+void sineWave (Ref<VectorXd> u,
+               const int k,
+               const double kappa,
+               const double t0) {
+  const int    N = u.rows ();
+  const double h = 1.0 / (N + 1);
+  Vector1d x = Vector1d::Constant (h);
+
+  for (int i = 0; i < N; ++i) {
+    u[i] = sin (k * M_PI * x[0]) * exp (-k * k * kappa * t0 * M_PI * M_PI);
+    x[0] += h;
+  }
+}
+
 

@@ -8,9 +8,20 @@
 using namespace Eigen;
 using namespace std;
 
-void displayField (VectorXd,
-                   const int);
+void displayField (VectorXd);
 
 void displayField (VectorXd,
-                   const int,
                    ostream &);
+
+void outputStats (const int,
+                  const double,
+                  const double,
+                  const int,
+                  const double);
+
+ofstream & openTeXDoc (string);
+
+void makeTeXRow (ofstream &,
+                 VectorXd);
+
+void closeTeXDoc (ofstream &);

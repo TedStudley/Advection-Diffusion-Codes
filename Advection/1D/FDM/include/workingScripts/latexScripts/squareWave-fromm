@@ -1,0 +1,30 @@
+{
+  ofstream & texStream = openTeXDoc ("output/latexTables/squareWave-fromm.tex");
+
+  for (int N = 16; N < 8192; N *= 2) {
+    VectorXd u (N);
+    VectorXd utemp (N);
+
+    double h       = 1.0 / (N + 1);
+    double dt      = mu * h / kappa;
+
+    init_timestep (dt, T);
+
+    squareWave (u);
+
+    double t = t0;
+    
+    for (int i = 0; TOL < T - t; ++i) {
+      frommMethod (u, dt, h, v);
+      t += dt;
+    }
+
+    squareWave (utemp);
+
+    VectorXd error = u - utemp;
+
+    makeTeXRow (texStream, error);
+  }
+
+  closeTeXDoc (texStream);
+}
