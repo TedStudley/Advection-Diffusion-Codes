@@ -25,28 +25,61 @@ void upwindMethod (Ref<VectorXd> u,
 }
 
 void frommMethod (Ref<VectorXd> u,
-                  const double delta_t,
+                  const double dt,
                   const double h,
                   const VectorXd v) {
   const int    N     = u.rows ();
-  const double sigma = v[0] * delta_t / h;
+  double sigmaL;
+  double sigmaR;
 
   VectorXd u1 = u;
-  for (int i = 0; i < int (N); ++i) 
-    u[i] = u1[i] + sigma *
-                   ((bc (u1, N, i - 1) + (1.0 - sigma) * 0.25 * (bc (u1, N, i) - bc (u1, N, i - 2))) -
-                    (bc (u1, N, i) + (1.0 - sigma) * 0.25 * (bc (u1, N, i + 1) - bc (u1, N, i - 1))));
+  for (int i = 0; i < int (N); ++i) {
+    sigmaR = (bc(u1, N, i+1) - bc(u1, N, i-1)) / (2 * h);
+    sigmaL = (bc(u1, N, i) - bc(u1, N, i-2)) / (2 * h);
+    u[i]   = bc (u1, N, i) - 1 / h * (v[0] * dt * (bc (u1, N, i) - bc (u1, N, i - 1)) + (v[0] * h / 2 * dt - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
+  }
 }
 
+void beamWarming (Ref<VectorXd> u,
+                  const double dt,
+                  const double h,
+                  const VectorXd v) {
+  const int    N     = u.rows ();
+  double sigmaL;
+  double sigmaR;
+
+  VectorXd u1 = u;
+  for (int i = 0; i < int (N); ++i) {
+    sigmaR = (bc(u1, N, i) - bc(u1, N, i - 1)) / h;
+    sigmaL = (bc(u1, N, i - 1) - bc(u1, N, i - 2)) / h;
+    u[i] = bc(u1, N, i) - 1 / h * (v[0] * dt * (bc(u1, N, i) - bc(u1, N, i-1)) + (v[0] * h / 2 * dt - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
+  }
+}
+
+void laxWendroff (Ref<VectorXd> u,
+                  const double dt,
+                  const double h,
+                  const VectorXd v) {
+  const int    N     = u.rows ();
+  double sigmaL;
+  double sigmaR;
+
+  VectorXd u1 = u;
+  for (int i = 0; i < int (N); ++i) {
+    sigmaR = (bc(u1, N, i+1) - bc(u1, N, i)) / h;
+    sigmaL = (bc(u1, N, i) - bc(u1, N, i-1)) / h;
+    u[i] = bc(u1, N, i) - 1 / h * (v[0] * dt * (bc(u1, N, i) - bc(u1, N, i-1)) + (v[0] * h / 2 * dt - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
+  }
+}
 
 void frommVanLeer (Ref<VectorXd> u,
-                   const double delta_t,
+                   const double dt,
                    const double h,
                    const VectorXd v) {
   double thetaL, thetaR, phiL, phiR, VLDeltaL, VLDeltaR, fluxL, fluxR;
   
   const int    N     = u.rows ();
-  const double sigma = v[0] * delta_t / h;
+  const double sigma = v[0] * dt / h;
 
   VectorXd u1 = u;
   for (int i = 0; i < N; ++i) {

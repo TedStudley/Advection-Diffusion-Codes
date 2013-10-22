@@ -48,6 +48,8 @@ while (N <= 8192):
     solve(A, u.vector(), b)
     u_2.assign(u_1)
     u_1.assign(u)
+    plot(u_1, rescale=False)
+    interactive()
     t += dt
 
   M = min(N, 300)

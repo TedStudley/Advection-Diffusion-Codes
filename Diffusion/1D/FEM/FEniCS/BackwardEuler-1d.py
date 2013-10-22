@@ -21,8 +21,8 @@ while (N <= 8192):
   mesh = UnitIntervalMesh(N)
   V = FunctionSpace(mesh, 'Lagrange', 2)
 
-  u1 = sineWave(kappa, 0)
-  #u1 = squareWave()
+  #u1 = sineWave(kappa, 0)
+  u1 = squareWave()
 
   bc = DirichletBC(V, Constant(0.0), boundary)
 
@@ -44,12 +44,14 @@ while (N <= 8192):
     bc.apply(A, b)
     solve(A, u.vector(), b)
     u_1.assign(u)
+    plot(u_1, rescale=False)
+    interactive()
     t += dt
 
   M = min(N, 300)
 
-  u_exact = interpolate(sineWave(kappa, t), V)
-  #u_exact = interpolate(fourierSquare(M, kappa, t), V)
+  #u_exact = interpolate(sineWave(kappa, t), V)
+  u_exact = interpolate(fourierSquare(M, kappa, t), V)
 
   u_error = u_1.vector() - u_exact.vector()
 

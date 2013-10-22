@@ -25,7 +25,7 @@ int main() {
   const int    k     = 2;
   double       t0    = 0.0;
 
-  #include "workingScripts/latexScripts/sineWave-fromm"
+  #include "workingScripts/latexScripts/sineWave-beamWarming"
 
   return 0;
 }
