@@ -3,8 +3,8 @@
 using namespace Eigen;
 using namespace std;
 
-double maxNorm (VectorXd);
+double maxNorm (VectorXd u);
 
-double oneNorm (VectorXd);
+double oneNorm (VectorXd u);
 
-double twoNorm (VectorXd);
+double twoNorm (VectorXd u);

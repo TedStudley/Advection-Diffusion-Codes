@@ -10,7 +10,7 @@ using namespace Eigen;
 
 void squareWave (Ref<VectorXd> u) {
   const int    N = u.rows ();
-  const double h = 1.0 / (N + 1);
+  const double h = 1.0 / N;
   Vector1d x = Vector1d::Constant (h);
 
   for (int i = 0; i < N; ++i) {
@@ -23,8 +23,8 @@ void fourierSquare (Ref<VectorXd> u,
                     const double kappa,
                     const double t0) {
   const int    N = u.rows ();
-  const double h = 1.0 / (N + 1);
-  Vector1d     x = Vector1d::Constant (h);
+  const double h = 1.0 / N;
+  Vector1d     x = Vector1d::Constant (0);
 
   int M = 300;
   if (N < M) M = N;
@@ -43,8 +43,8 @@ void fourierSquare (Ref<VectorXd> u,
 void sineWave (Ref<VectorXd> u,
                const int k) {
   const int    N = u.rows ();
-  const double h = 1.0 / (N + 1);
-  Vector1d x = Vector1d::Constant (h);
+  const double h = 1.0  / N;
+  Vector1d x = Vector1d::Constant (0);
 
   for (int i = 0; i < N; ++i) {
     u[i] = sin (k * M_PI * x[0]);
@@ -57,7 +57,7 @@ void sineWave (Ref<VectorXd> u,
                const double kappa,
                const double t0) {
   const int    N = u.rows ();
-  const double h = 1.0 / (N + 1);
+  const double h = 1.0 / N;
   Vector1d x = Vector1d::Constant (h);
 
   for (int i = 0; i < N; ++i) {

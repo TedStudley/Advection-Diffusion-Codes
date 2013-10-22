@@ -17,13 +17,13 @@ using namespace std;
 typedef Matrix<double, 1, 1> Vector1d;
 
 inline double periodicBC (Ref<VectorXd> u,
-                          unsigned int N,
-                          int i) {
+                          unsigned int  N,
+                          int           i) {
   if (i < 0) return periodicBC (u, N, i + N);
   else return u[i % N];
 }
 
-inline void init_timestep (double & dt,
+inline void init_timestep (double &     dt,
                            const double T) {
   int N_timestep = T / dt;
   if (abs (T - N_timestep * dt) > TOL) {

@@ -5,8 +5,8 @@
     VectorXd u (N);
     VectorXd utemp (N);
 
-    double h       = 1.0 / (N + 1);
-    double dt      = mu * h / kappa;
+    double h       = 1.0 / N;
+    double dt      = mu * h / (twoNorm (v) * kappa);
 
     init_timestep (dt, T);
 
@@ -23,7 +23,7 @@
 
     VectorXd error = u - utemp;
 
-    makeTeXRow (texStream, error);
+    makeTeXRow (error, texStream);
   }
 
   closeTeXDoc (texStream);

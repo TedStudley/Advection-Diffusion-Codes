@@ -35,4 +35,5 @@
       filename.str (std::string ());
     }
   }
+  cerr << t << endl;
 }

@@ -46,8 +46,8 @@ ofstream & openTeXDoc (string filename) {
   return stream;
 }
 
-void makeTeXRow (ofstream & stream,
-                 VectorXd error) {
+void makeTeXRow (VectorXd error,
+                 ofstream & stream) {
   static double om;
   static double oo;
   static double ot;
