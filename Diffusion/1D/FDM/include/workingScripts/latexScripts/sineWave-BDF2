@@ -1,0 +1,36 @@
+{
+  ofstream & texStream = openTeXDoc ("output/latexTables/sineWave-BDF2.tex");
+
+  for (int N = 16; N < 8192; N *= 2) {
+    VectorXd u (N);
+    VectorXd u1 (N);
+    VectorXd utemp (N);
+
+    double h  = 1.0 / (N + 1);
+    double dt = mu * h / kappa;
+
+    init_timestep (dt, T);
+
+    sineWave (u, k);
+    sineWave (u1, k);
+
+    backwardEuler (u, dt, h, kappa);
+
+    double t = dt;
+
+    for (int i = 0; TOL < T - t; ++i) {
+      utemp = u;
+      BDF2 (u, u1, dt, h, kappa);
+      u1 = u;
+      t += dt;
+    }
+
+    sineWave (utemp, k, kappa, t);
+
+    VectorXd error = u - utemp;
+
+    makeTeXRow (error, texStream);
+  }
+
+  closeTeXDoc (texStream);
+}
