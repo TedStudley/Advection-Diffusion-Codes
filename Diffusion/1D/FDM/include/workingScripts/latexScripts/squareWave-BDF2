@@ -1,5 +1,5 @@
 {
-  ofstream & texStream = openTeXDoc ("output/latexTables/sineWave-BDF2.tex");
+  ofstream & texStream = openTeXDoc ("output/latexTables/squareWave-BDF2.tex");
 
   for (int N = 16; N < 8192; N *= 2) {
 
@@ -12,8 +12,8 @@
     VectorXd u1 (N);
     VectorXd utemp (N);
 
-    sineWave (u, k);
-    sineWave (u1, k);
+    squareWave (u);
+    squareWave (u1);
 
     backwardEuler (u, dt, h, kappa);
 
@@ -26,7 +26,7 @@
       t += dt;
     }
 
-    sineWave (utemp, k, kappa, t);
+    fourierSquare (utemp, kappa, t);
 
     VectorXd error = u - utemp;
 
