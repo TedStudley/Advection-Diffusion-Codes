@@ -1,5 +1,3 @@
-#define CHECK_MONOTONICITY false
-
 #include <initial-conditions.h>
 #include <diffusion.h>
 #include <utility.h>
@@ -13,20 +11,23 @@
 #include <fstream>
 #include <sstream>
 
+#define CHECK_MONOTONICITY true
+#define DIM 1
+
 using namespace Eigen;
 using namespace std;
 
 
 int main() {
-  int N                = 512;
-  const double mu      = 1.0;
+  int          N       = 256;
+  const double mu      = 0.9;
   const double kappa   = 1.0;
   const double T       = 1.0;
-  const int k          = 1;
-  double t             = 0.0;
-  double t0            = 0;
+  Vector1d     v       = Vector1d::Constant(1.0);
+  const int k          = 2;
+  double t0            = 0.0;
 
-  #include <working-scripts/OutputScripts/squareWave-BDF2>
+  #include <workingScripts/outputScripts/squareWave-BDF2>
 
   return 0;
 }

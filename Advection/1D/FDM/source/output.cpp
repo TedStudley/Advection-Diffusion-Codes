@@ -15,21 +15,21 @@ void displayField (VectorXd u) {
   cout << u << endl;
 }
 
-void displayField (VectorXd u,
+void displayField (VectorXd  u,
                    ostream & stream) {
   stream << u << endl;
 }
 
-void outputStats (const int N,
+void outputStats (const int    N,
                   const double h,
                   const double dt,
-                  const int stride,
+                  const int    stride,
                   const double T) {
-  std::cerr << "==> Run statistics:" << endl
-            << "====> Subdivisions (N)       = " << N << endl
-            << "====> Timestep (dt)          = " << dt << endl
-            << "====> Output stride (stride) = " << stride << endl
-            << "====> End time (T)           = " << T << endl << endl;
+  cerr << "==> Run statistics:" << endl
+       << "====> Subdivisions (N)       = " << N << endl
+       << "====> Timestep (dt)          = " << dt << endl
+       << "====> Output stride (stride) = " << stride << endl
+       << "====> End time (T)           = " << T << endl << endl;
 }
 
 ofstream & openTeXDoc (string filename) {
@@ -46,7 +46,7 @@ ofstream & openTeXDoc (string filename) {
   return stream;
 }
 
-void makeTeXRow (VectorXd error,
+void makeTeXRow (VectorXd   error,
                  ofstream & stream) {
   static double om;
   static double oo;
@@ -71,7 +71,7 @@ void makeTeXRow (VectorXd error,
   om = nm; oo = no; ot = nt;
 }
 
-void closeTeXDoc (std::ofstream & stream) {
+void closeTeXDoc (ofstream & stream) {
   stream << "\t\\end{tabular}" << endl
          << "\\end{document}" << endl;
   stream.close();

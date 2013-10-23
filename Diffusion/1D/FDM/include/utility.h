@@ -4,29 +4,33 @@
 #define sign(x)        (x < 0) ? (-1) : 1
 #define mod(x, N)      (x + N) % N
 
-#include <Eigen/Dense>
+#define TOL 10e-6
 
 #include <iostream>
+
+#include <Eigen/Dense>
 
 using namespace Eigen;
 using namespace std;
 
-inline double periodicBC (Eigen::Ref<Eigen::VectorXd> u,
-                          unsigned int N,
-                          int i) {
+typedef Matrix<double, 1, 1> Vector1d;
+
+inline double periodicBC (Ref<Eigen::VectorXd> u,
+                          unsigned int         N,
+                          int                  i) {
   if (i < 0) return periodicBC (u, N, i + N);
   else return u[i % N];
 }
 
-inline void init_timestep (double & delta_t,
-                           const double end_t) {
-  int N_timestep = end_t / delta_t;
-  if (abs (N_timestep * delta_t - end_t) > 10e-16) {
-    delta_t = end_t / (++N_timestep);
+inline void init_timestep (double &     dt,
+                           const double T) {
+  int N_timestep = T / dt;
+  if (abs (N_timestep * dt - T) > TOL) {
+    dt = T / (++N_timestep);
   }
 }
 
-inline void monotonicityCheck (Eigen::VectorXd u,
+inline void monotonicityCheck (VectorXd     u,
                                const double lower = 0.0,
                                const double upper = 1.0) {
   static double old_lower;
@@ -43,9 +47,9 @@ inline void monotonicityCheck (Eigen::VectorXd u,
   double new_upper = u.maxCoeff ();
 
   if (new_lower < old_lower || new_upper > old_upper) {
-    std::cerr << "Monotonicity not preserved!" << std::endl
-              << "\tlower: " << old_lower << " -> " << new_lower << std::endl
-              << "\tupper: " << old_upper << " -> " << new_upper << std::endl;
+    std::cerr << "==> Monotonicity not preserved! <==" << endl
+              << "==>\tlower: " << old_lower << " -> " << new_lower << endl
+              << "==>\tupper: " << old_upper << " -> " << new_upper << endl;
   }
 
   old_lower = new_lower;

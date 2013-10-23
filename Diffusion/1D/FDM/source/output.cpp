@@ -7,56 +7,71 @@
 #include <iomanip>
 #include <fstream>
 
-void displayField (Eigen::VectorXd u) {
-  std::cout << u << std::endl;
+using namespace std;
+using namespace Eigen;
+
+void displayField (VectorXd u) {
+  cout << u << endl;
 }
 
-void displayField (Eigen::VectorXd u,
-                   std::ofstream & stream) {
-  stream << u << std::endl;
+void displayField (VectorXd u,
+                   ofstream & stream) {
+  stream << u << endl;
 }
 
-std::ofstream & openTeXDoc (std::string filename) {
-  std::ofstream * stream_ptr = new std::ofstream;
-  std::ofstream & stream = *stream_ptr;
-  stream.open (filename.c_str(), std::ofstream::out | std::ofstream::trunc);
+void outputStats (const int    N,
+                  const double h,
+                  const double dt,
+                  const int    stride,
+                  const double T) {
+  cerr << "==> Run statistics:" << endl
+       << "====> Subdivisions (N)       = " << N << endl
+       << "====> Timestep (dt)          = " << dt << endl
+       << "====> Output stride (stride) = " << stride << endl
+       << "====> End time (T)           = " << T << endl << endl;
+}
 
-  stream << "\\documentclass[12pt]{article}" << std::endl
-         << "\\begin{document}" << std::endl;
-  stream << "\t\\begin{tabular}{l|c|c|c|c|c|c}" << std::endl
-         << "\t\tN&Max Norm&Convergence&One Norm&Convergence&Two Norm&Convergence\\\\" << std::endl
-         << "\t\t&&Rate&&Rate&&Rate\\\\" << std::endl;
+ofstream & openTeXDoc (string filename) {
+  ofstream * stream_ptr = new ofstream;
+  ofstream & stream = *stream_ptr;
+  stream.open (filename.c_str (), ofstream::out | ofstream::trunc);
+
+  stream << "\\documentclass[12pt]{article}" << endl
+         << "\\begin{document}" << endl
+         << "\t\\begin{tabular}{l|c|c|c|c|c|c}" << endl
+         << "\t\tN&Max Norm&Convergence&One Norm&Convergence&Two Norm&Convergence\\\\" << endl
+         << "\t\t&&Rate&&Rate&&Rate\\\\" << endl;
 
   return stream;
 }
 
-void makeTeXRow (std::ofstream & stream,
-                   Eigen::VectorXd error) {
-  static double om;   // old max norm of error
-  static double oo;   // old one norm of error
-  static double ot;   // old two norm of error
+void makeTeXRow (VectorXd error,
+                 ofstream & stream) {
+  static double om;   
+  static double oo;   
+  static double ot;   
 
-  stream << "\t\t\\hline" << std::endl;
+  stream << "\t\t\\hline" << endl;
 
-  double nm = maxNorm (error);  // new max norm of error
-  double no = oneNorm (error);  // new one norm of error
-  double nt = twoNorm (error);  // new two norm of error
+  double nm = maxNorm (error);
+  double no = oneNorm (error);
+  double nt = twoNorm (error);
 
-  int N = error.rows();
+  int N = error.rows ();
 
   stream << "\t\t" << N  
-         << "&" << std::scientific << std::setprecision (6) << nm << std::fixed 
-         << "&" << std::setprecision (2) << ((om != 0) ? log (om / nm) / log (2.0) : 0)
-         << "&" << std::scientific << std::setprecision (6) << no << std::fixed
-         << "&" << std::setprecision (2) << ((oo != 0) ? log (oo / no) / log (2.0) : 0)
-         << "&" << std::scientific << std::setprecision (6) << nt << std::fixed
-         << "&" << std::setprecision (2) << ((ot != 0) ? log (ot / nt) / log (2.0) : 0)
-         << "\\\\" << std::endl;
+         << "&" << scientific << setprecision (6) << nm << fixed 
+         << "&" << setprecision (2) << ((om != 0) ? log (om / nm) / log (2.0) : 0)
+         << "&" << scientific << setprecision (6) << no << fixed
+         << "&" << setprecision (2) << ((oo != 0) ? log (oo / no) / log (2.0) : 0)
+         << "&" << scientific << setprecision (6) << nt << fixed
+         << "&" << setprecision (2) << ((ot != 0) ? log (ot / nt) / log (2.0) : 0)
+         << "\\\\" << endl;
   om = nm; oo = no; ot = nt;
 }
 
-void closeTeXDoc (std::ofstream & stream) {
-  stream << "\t\\end{tabular}" << std::endl
-         << "\\end{document}" << std::endl;
-  stream.close();
+void closeTeXDoc (ofstream & stream) {
+  stream << "\t\\end{tabular}" << endl
+         << "\\end{document}" << endl;
+  stream.close ();
 }

@@ -2,8 +2,10 @@
 
 #include <Eigen/Dense>
 
-double maxNorm (Eigen::VectorXd);
+using namespace Eigen;
 
-double oneNorm (Eigen::VectorXd);
+double maxNorm (VectorXd u);
 
-double twoNorm (Eigen::VectorXd);
+double oneNorm (VectorXd u);
+
+double twoNorm (VectorXd u);

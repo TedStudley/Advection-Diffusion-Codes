@@ -11,14 +11,14 @@ using namespace std;
 
 
 void forwardEuler (Ref<VectorXd> u,
-                   const double delta_t,
+                   const double dt,
                    const double h,
                    const double kappa) {
   const int N = u.rows();
   static MatrixXd B;
   static int oldN;
   if (oldN != N) {
-    double mu = delta_t * kappa / (h * h);
+    double mu = dt * kappa / (h * h);
     MatrixXd A = MatrixXd::Zero (N, N);
     A.diagonal (0) = VectorXd::Constant (N, 2);
     A.diagonal (-1) = A.diagonal (1) = VectorXd::Constant (N - 1, -1);
@@ -30,7 +30,7 @@ void forwardEuler (Ref<VectorXd> u,
 }
 
 void backwardEuler (Ref<VectorXd> u,
-                    const double delta_t,
+                    const double dt,
                     const double h,
                     const double kappa) {
   const int N = u.rows();
@@ -38,7 +38,7 @@ void backwardEuler (Ref<VectorXd> u,
   static LDLT<MatrixXd> Bdecomp;
   static int oldN;
   if (oldN != N) {
-    double mu = delta_t * kappa / (h * h);
+    double mu = dt * kappa / (h * h);
     MatrixXd A = MatrixXd::Zero (N, N);
     A.diagonal (0) = VectorXd::Constant (N, 2);
     A.diagonal (-1) = A.diagonal (1) = VectorXd::Constant (N - 1, -1);
@@ -52,7 +52,7 @@ void backwardEuler (Ref<VectorXd> u,
 }
 
 void crankNicolson (Ref<VectorXd> u,
-                    const double delta_t,
+                    const double dt,
                     const double h,
                     const double kappa) {
   const int N = u.rows();
@@ -63,7 +63,7 @@ void crankNicolson (Ref<VectorXd> u,
   static double mu;
   static int oldN;
   if (oldN != N) {
-    mu = delta_t * kappa / (h * h);
+    mu = dt * kappa / (h * h);
     A = MatrixXd::Zero (N, N);
     A.diagonal (0) = VectorXd::Constant (N, 2);
     A.diagonal (-1) = A.diagonal (1) = VectorXd::Constant (N - 1, -1);
@@ -79,7 +79,7 @@ void crankNicolson (Ref<VectorXd> u,
 
 void BDF2 (Ref<VectorXd> u,
            Ref<VectorXd> u1,
-           const double delta_t,
+           const double dt,
            const double h,
            const double kappa) {
   const int N = u.rows();
@@ -88,7 +88,7 @@ void BDF2 (Ref<VectorXd> u,
   static LDLT<MatrixXd> Bdecomp;
   static int oldN;
   if (oldN != N) {
-    double mu = delta_t * kappa / (h * h);
+    double mu = dt * kappa / (h * h);
     MatrixXd A = MatrixXd::Zero (N, N);
     A.diagonal (0) = VectorXd::Constant (N, 2);
     A.diagonal (1) = A.diagonal (-1) = VectorXd::Constant (N - 1, -1);
@@ -104,7 +104,7 @@ void BDF2 (Ref<VectorXd> u,
 }
 
 void TR_BDF2 (Ref<VectorXd> u,
-              const double delta_t,
+              const double dt,
               const double h,
               const double kappa) {
   const int N = u.rows();
@@ -115,12 +115,12 @@ void TR_BDF2 (Ref<VectorXd> u,
   static double mu;
   static int oldN;
   if (oldN != N) {
-    mu = delta_t * kappa / (h * h);
+    mu = dt * kappa / (h * h);
     A = MatrixXd::Zero (N, N);
     A.diagonal (0) = VectorXd::Constant (N, 2);
     A.diagonal (1) = A.diagonal (-1) = VectorXd::Constant (N - 1, -1);
-    MatrixXd B = (MatrixXd::Identity(N, N) + delta_t / 4.0 * mu * A);
-    MatrixXd C = (MatrixXd::Identity(N, N) + delta_t / 3.0 * mu * A);
+    MatrixXd B = (MatrixXd::Identity(N, N) + dt / 4.0 * mu * A);
+    MatrixXd C = (MatrixXd::Identity(N, N) + dt / 3.0 * mu * A);
     Bsolve.compute(B);
     Csolve.compute(C);
     oldN = N;
@@ -129,7 +129,7 @@ void TR_BDF2 (Ref<VectorXd> u,
 
   VectorXd rhs (N);
 
-  rhs = (MatrixXd::Identity(N, N) - (delta_t / 4.0 * mu * A)) * u;
+  rhs = (MatrixXd::Identity(N, N) - (dt / 4.0 * mu * A)) * u;
 
   VectorXd u1 (N);
   u1 = Bsolve.solve(rhs);

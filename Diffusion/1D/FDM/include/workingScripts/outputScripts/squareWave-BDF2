@@ -20,7 +20,7 @@
   squareWave (u1);
   squareWave (u);
 
-  t = t0;
+  double t = t0;
 
   for (int i = 0; t < T; i++) {
     if (i > 0) {

@@ -48,7 +48,7 @@ inline void monotonicityCheck (Eigen::VectorXd u,
   double new_upper = u.maxCoeff ();
 
   if (new_lower < old_lower || new_upper > old_upper) {
-    cerr << "==> Monotonicity not preserved! <=="  
+    cerr << "==> Monotonicity not preserved! <==" << endl
          << "==>\tlower: " << old_lower << " -> " << new_lower << endl
          << "==>\tupper: " << old_upper << " -> " << new_upper << endl;
   }

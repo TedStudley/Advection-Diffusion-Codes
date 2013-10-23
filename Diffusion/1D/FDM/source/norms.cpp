@@ -2,14 +2,17 @@
 
 #include <Eigen/Dense>
 
-double maxNorm (Eigen::VectorXd u) {
+using namespace std;
+using namespace Eigen;
+
+double maxNorm (VectorXd u) {
   return u.array ().abs ().maxCoeff ();
 }
 
-double oneNorm (Eigen::VectorXd u) {
+double oneNorm (VectorXd u) {
   return (u.array ().abs ().sum ()) / u.rows ();
 }
 
-double twoNorm (Eigen::VectorXd u) {
+double twoNorm (VectorXd u) {
   return sqrt (u.array ().square ().sum () / u.rows ());
 }

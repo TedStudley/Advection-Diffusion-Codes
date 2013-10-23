@@ -2,16 +2,26 @@
 
 #include <Eigen/Dense>
 
-#include <fstream>
+#include <iostream>
+#include <ostream>
 
-void displayField (Eigen::VectorXd);
+using namespace Eigen;
+using namespace std;
 
-void displayField (Eigen::VectorXd,
-                   std::ofstream &);
+void displayField (VectorXd u);
 
-std::ofstream & openTeXDoc (std::string);
+void displayField (VectorXd   u,
+                   ofstream & stream);
 
-void makeTeXRow (std::ofstream &,
-                 Eigen::VectorXd);
+void outputStats (const int    N,
+                  const double h,
+                  const double dt,
+                  const int    stride,
+                  const double T);
 
-void closeTeXDoc (std::ofstream &);
+ofstream & openTeXDoc (string filename);
+
+void makeTeXRow (VectorXd   u,
+                 ofstream & stream);
+
+void closeTeXDoc (ofstream & stream);
