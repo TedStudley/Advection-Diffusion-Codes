@@ -22,7 +22,7 @@ int main() {
   int          N       = 256;
   const double mu      = 0.9;
   const double kappa   = 1.0;
-  const double T       = 1.0;
+  const double T       = 0.25;
   Vector1d     v       = Vector1d::Constant(1.0);
   const int k          = 2;
   double t0            = 0.0;

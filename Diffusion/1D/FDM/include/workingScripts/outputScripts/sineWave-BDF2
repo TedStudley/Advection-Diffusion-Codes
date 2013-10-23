@@ -1,35 +1,40 @@
 {
-  std::string outputDir = "Output/sineWave/BDF2/";
+  std::string outputDir = "output/sineWave/BDF2/";
   std::stringstream filename;
   std::ofstream outFile;
 
-  system (("rm " + outputDir + "*.dat").c_str ());
+  system (("rm " + outputDir + "*.dat").c_str());
 
-  double h        = 1.0 / (N + 1);
-  double delta_t  = mu * h / kappa;
+  double h  = 1.0 / (N + 1);
+  double dt = mu * h / kappa;
 
-  init_timestep (delta_t, T);
+  init_timestep (dt, T);
 
-  int stride = T / delta_t / 100;
+  int stride = T / dt / 100;
   stride += ((stride == 0) ? 1 : 0);
 
   VectorXd u (N);
   VectorXd u1 (N);
   VectorXd utemp (N);
 
-  sineWave (u1, k);
   sineWave (u, k);
-  backwardEuler (u, delta_t, h, kappa);
+  sineWave (u1, k);
 
-  t = delta_t;
+  backwardEuler (u, dt, h, kappa);
 
-  for (int i = 0; t < T; i++) {
+  double t = dt;
+
+  outputStats (N, h, dt, stride, T);
+
+  for (int i = 0; TOL < T - t; i++) {
+    if (CHECK_MONOTONICITY) monotonicityCheck (u, u.minCoeff (), u.maxCoeff ());
+    std::cerr << "==> Step " << i << " (t=" << t << ")" << endl;
     utemp = u;
-    crankNicolson (u, delta_t, h, kappa);
+    BDF2 (u, u1, dt, h, kappa);
     u1 = utemp;
-    t += delta_t;
-
-    if (i % stride == 0) {
+    t += dt;
+  
+    if (i % stride == 0 || t >= T) {
       filename << outputDir << "output-" << setw (6) << setfill ('0') << i << ".dat";
       outFile.open (filename.str().c_str());
       displayField (u, outFile);

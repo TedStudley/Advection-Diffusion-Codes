@@ -1,30 +1,33 @@
 {
-  std::string outputDir = "Output/squareWave/forwardEuler/";
+  std::string outputDir = "output/squareWave/forwardEuler/";
   std::stringstream filename;
   std::ofstream outFile;
 
   system (("rm " + outputDir + "*.dat").c_str());
 
-  double h        = 1.0 / (N + 1);
-  double delta_t  = mu * h / kappa;
+  double h  = 1.0 / (N + 1);
+  double dt = mu * h / kappa;
 
-  init_timestep (delta_t, T);
+  init_timestep (dt, T);
 
-  int stride = T / delta_t / 100;
+  int stride = T / dt / 100;
   stride += ((stride == 0) ? 1 : 0);
 
   VectorXd u (N);
-  VectorXd utemp (N);
 
   squareWave (u);
 
-  t = 0;
+  double t = t0;
 
-  for (int i = 0; t < T; i++) {
-    forwardEuler (u, delta_t, h, kappa);
-    t += delta_t;
+  outputStats (N, h, dt, stride, T);
+
+  for (int i = 0; TOL < T - t; i++) {
+    if (CHECK_MONOTONICITY) monotonicityCheck (u, u.minCoeff (), u.maxCoeff ());
+    std::cerr << "==> Step " << i << " (t=" << t << ")" << endl;
+    forwardEuler (u, dt, h, kappa);
+    t += dt;
   
-    if (i % stride == 0) {
+    if (i % stride == 0 || t >= T) {
       filename << outputDir << "output-" << setw (6) << setfill ('0') << i << ".dat";
       outFile.open (filename.str().c_str());
       displayField (u, outFile);
