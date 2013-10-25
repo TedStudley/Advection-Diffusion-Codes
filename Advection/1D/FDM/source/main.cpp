@@ -18,7 +18,7 @@ using namespace Eigen;
 using namespace std;
 
 int main() {
-  int          N     = 256;
+  int          N     = 128;
   const double mu    = 0.9;
   const double kappa = 1.0;
   const double T     = 1.0;
@@ -26,7 +26,13 @@ int main() {
   const int    k     = 2;
   double       t0    = 0.0;
 
-  #include "workingScripts/latexScripts/squareWave-upwind"
+  #include "workingScripts/outputScripts/sineWave-upwind"
+  #include "workingScripts/outputScripts/sineWave-fromm"
+  #include "workingScripts/outputScripts/sineWave-fvl"
+  #include "workingScripts/outputScripts/squareWave-upwind"
+  #include "workingScripts/outputScripts/squareWave-fromm"
+  #include "workingScripts/outputScripts/squareWave-fvl"
+
 
   return 0;
 }
