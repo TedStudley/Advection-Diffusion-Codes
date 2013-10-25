@@ -17,11 +17,22 @@ void upwindMethod (Ref<VectorXd> u,
   double sigmaL;
   double sigmaR;
 
-  VectorXd u1 = u;
-  for (int i = 0; i < N; ++i) {
+  MatrixXd grad = MatrixXd::Zero (N, N);
+  grad.diagonal (0) = VectorXd::Constant (N, 1);
+  grad.diagonal (-1) = VectorXd::Constant (N-1, -1);
+  grad(N-1,0) = -1; 
+
+  grad *= 1 / h;
+
+  VectorXd u1 = v[0] * dt * grad * u;
+
+  u += u1;
+  /*
+    for (int i = 0; i < N; ++i) {
     sigmaR = sigmaL = 0;
     u[i] = bc(u1, N, i) - 1 / h * (v[0] * dt * (bc(u1, N, i) - bc(u1, N, i-1)) + (v[0] * h / 2 * h - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
   }
+  */
 }
 
 void frommMethod (Ref<VectorXd> u,
