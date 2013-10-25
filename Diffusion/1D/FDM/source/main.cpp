@@ -27,7 +27,7 @@ int main() {
   const int k          = 2;
   double t0            = 0.0;
 
-  #include <workingScripts/latexScripts/squareWave-crankNicolson>
+  #include <workingScripts/latexScripts/squareWave-BDF2>
 
   return 0;
 }
