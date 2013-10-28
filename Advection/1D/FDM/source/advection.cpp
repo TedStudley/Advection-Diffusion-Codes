@@ -117,28 +117,54 @@ void laxWendroff (Ref<VectorXd> u,
   VectorXd u1 = ((v[0] * dt / h) * grad + (v[0] * dt / (2.0 * h) - v[0] * v[0] * dt * dt / (2.0 * h * h)) * sigma) * u;
 
   u -= u1;
-  /*
-
-  double sigmaL;
-  double sigmaR;
-
-  VectorXd u1 = u;
-  for (int i = 0; i < N; ++i) {
-    sigmaR = (bc(u1, N, i+1) - bc(u1, N, i)) / h;
-    sigmaL = (bc(u1, N, i) - bc(u1, N, i-1)) / h;
-    u[i] = bc(u1, N, i) - 1 / h * (v[0] * dt * (bc(u1, N, i) - bc(u1, N, i-1)) + (v[0] * h / 2 * dt - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
-  }
-  */
 }
 
 void frommVanLeer (Ref<VectorXd> u,
                    const double dt,
                    const double h,
                    const VectorXd v) {
-  double thetaL, thetaR, phiL, phiR, VLDeltaL, VLDeltaR, fluxL, fluxR;
-  
   const int N = u.rows ();
+/* 
+  static int oldN;
+
+  static MatrixXd grad;
+  static MatrixXd cDiff, lDiff, rDiff;
+
+  if (oldN != N) {
+    grad = MatrixXd::Zero (N, N);
+    grad.diagonal () = VectorXd::Constant (N, 1.0);
+    grad.diagonal (-1) = VectorXd::Constant (N - 1, -1.0);
+    grad (0, N - 1) = -1.0;
+
+    cDiff = MatrixXd::Zero (N, N);
+    cDiff.diagonal (1) = VectorXd::Constant (N - 1, 1.0);
+    cDiff.diagonal (-1) = VectorXd::Constant (N - 1, -1.0);
+    cDiff (0, N - 1) = -1.0; cDiff (N - 1, 0) = 1.0;
+
+    lDiff = MatrixXd::Zero (N, N);
+    lDiff.diagonal () = VectorXd::Constant (N, 1.0);
+    lDiff.diagonal (-1) = VectorXd::Constant (N - 1, -1.0);
+    lDiff (0, N - 1) = -1.0;
+
+    rDiff = MatrixXd::Zero (N, N);
+    rDiff.diagonal () = VectorXd::Constant (N, -1.0);
+    rDiff.diagonal (1) = VectorXd::Constant (N - 1, 1.0);
+    rDiff (N - 1, 0) = 1.0;
+  }
+
+  VectorXd theta = (2*lDiff*u).cwiseAbs().cwiseMin((cDiff*u/2.0).cwiseAbs().cwiseMin((2*rDiff*u).cwiseAbs()));
+
+  VectorXd phi = (rDiff*u).cwiseProduct((lDiff*u));
+
+  VectorXd delta = ((cDiff*u).cwiseAbs().cwiseProduct(theta.unaryExpr(unarySign<double>()))).binaryExpr(phi, buildDelta<double>());
+
+  VectorXd u1 = (v[0] * dt / h) * grad * u + (v[0] * dt / (2 * h)) * (1.0 - v[0] * dt / h) * grad * delta;
+
+  u -= u1;
+*/
   const double sigma = v[0] * dt / h;
+
+  double thetaL, thetaR, phiL, phiR, VLDeltaL, VLDeltaR, fluxL, fluxR;
 
   VectorXd u1 = u;
   for (int i = 0; i < N; ++i) {
