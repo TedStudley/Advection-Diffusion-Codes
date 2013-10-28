@@ -14,25 +14,20 @@ void upwindMethod (Ref<VectorXd> u,
                    const double h,
                    const VectorXd v) {
   const int N = u.rows ();
-  double sigmaL;
-  double sigmaR;
+  static int oldN;
 
-  MatrixXd grad = MatrixXd::Zero (N, N);
-  grad.diagonal (0) = VectorXd::Constant (N, 1);
-  grad.diagonal (-1) = VectorXd::Constant (N-1, -1);
-  grad(N-1,0) = -1; 
+  static MatrixXd grad;
 
-  grad *= 1 / h;
-
-  VectorXd u1 = v[0] * dt * grad * u;
-
-  u += u1;
-  /*
-    for (int i = 0; i < N; ++i) {
-    sigmaR = sigmaL = 0;
-    u[i] = bc(u1, N, i) - 1 / h * (v[0] * dt * (bc(u1, N, i) - bc(u1, N, i-1)) + (v[0] * h / 2 * h - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
+  if (oldN != N) {
+    grad = MatrixXd::Zero (N, N);
+    grad.diagonal (0) = VectorXd::Constant (N, 1.0);
+    grad.diagonal (-1) = VectorXd::Constant (N - 1, -1.0);
+    grad (0, N - 1) = -1.0; 
   }
-  */
+
+  VectorXd u1 = (v[0] * dt / h) * grad * u;
+
+  u -= u1;
 }
 
 void frommMethod (Ref<VectorXd> u,
@@ -40,15 +35,30 @@ void frommMethod (Ref<VectorXd> u,
                   const double h,
                   const VectorXd v) {
   const int N = u.rows ();
-  double sigmaL;
-  double sigmaR;
+  
+  static int oldN;
 
-  VectorXd u1 = u;
-  for (int i = 0; i < N; ++i) {
-    sigmaR = (bc(u1, N, i+1) - bc(u1, N, i-1)) / (2 * h);
-    sigmaL = (bc(u1, N, i) - bc(u1, N, i-2)) / (2 * h);
-    u[i]   = bc (u1, N, i) - 1 / h * (v[0] * dt * (bc (u1, N, i) - bc (u1, N, i - 1)) + (v[0] * h / 2 * dt - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
+  static MatrixXd grad;
+  static MatrixXd sigma;
+
+  if (oldN != N) {
+    grad = MatrixXd::Zero (N, N);
+    grad.diagonal (0) = VectorXd::Constant (N, 1.0);
+    grad.diagonal (-1) = VectorXd::Constant (N - 1, -1.0);
+    grad (0, N - 1) = -1.0;
+
+    sigma = MatrixXd::Zero (N, N);
+    sigma.diagonal (0) = VectorXd::Constant (N, -1.0);
+    sigma.diagonal (1) = VectorXd::Constant (N - 1, 1.0);
+    sigma.diagonal (-1) = VectorXd :: Constant (N - 1, -1.0);
+    sigma.diagonal (-2) = VectorXd :: Constant (N - 2, 1.0);
+    sigma (0, N - 2) = sigma (1, N - 1) = sigma (N - 1, 0) = 1.0;
+    sigma (0, N - 1) = -1.0;
   }
+
+  VectorXd u1 = ((v[0] * dt / h) * grad + (v[0] * dt / (4.0 * h) - v[0] * v[0] * dt * dt / (4.0 * h * h)) * sigma) * u;
+  
+  u -= u1;
 }
 
 void beamWarming (Ref<VectorXd> u,
@@ -56,15 +66,29 @@ void beamWarming (Ref<VectorXd> u,
                   const double h,
                   const VectorXd v) {
   const int N = u.rows ();
-  double sigmaL;
-  double sigmaR;
+  
+  static int oldN;
 
-  VectorXd u1 = u;
-  for (int i = 0; i < N; ++i) {
-    sigmaR = (bc(u1, N, i) - bc(u1, N, i - 1)) / h;
-    sigmaL = (bc(u1, N, i - 1) - bc(u1, N, i - 2)) / h;
-    u[i] = bc(u1, N, i) - 1 / h * (v[0] * dt * (bc(u1, N, i) - bc(u1, N, i-1)) + (v[0] * h / 2 * dt - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
+  static MatrixXd grad;
+  static MatrixXd sigma;
+
+  if (oldN != N) {
+    grad = MatrixXd::Zero (N, N);
+    grad.diagonal (0) = VectorXd::Constant (N, 1.0);
+    grad.diagonal (-1) = VectorXd::Constant (N - 1, -1.0);
+    grad (0, N - 1) = -1.0;
+
+    sigma = MatrixXd::Zero (N, N);
+    sigma.diagonal (0) = VectorXd::Constant (N, 1.0);
+    sigma.diagonal (-1) = VectorXd::Constant (N - 1, -2.0);
+    sigma.diagonal (-2) = VectorXd::Constant (N - 2, 1.0);
+    sigma (0, N - 2) = sigma (1, N - 1) = 1.0;
+    sigma (0, N - 1) = -2.0;
   }
+
+  VectorXd u1 = ((v[0] * dt / h) * grad + (v[0] * dt / (2.0 * h) - v[0] * v[0] * dt * dt / (2.0 * h * h)) * sigma) * u;
+
+  u -= u1;
 }
 
 void laxWendroff (Ref<VectorXd> u,
@@ -72,6 +96,29 @@ void laxWendroff (Ref<VectorXd> u,
                   const double h,
                   const VectorXd v) {
   const int N = u.rows ();
+  
+  static int oldN;
+
+  static MatrixXd grad;
+  static MatrixXd sigma;
+
+  if (oldN != N) {
+    grad = MatrixXd::Zero (N, N);
+    grad.diagonal (0) = VectorXd::Constant (N, 1.0);
+    grad.diagonal (-1) = VectorXd::Constant (N - 1, -1.0);
+    grad (0, N - 1) = -1.0;
+
+    sigma = MatrixXd::Zero (N, N);
+    sigma.diagonal (0) = VectorXd::Constant (N, -2.0);
+    sigma.diagonal (1) = sigma.diagonal (-1) = VectorXd::Constant (N - 1, 1.0);
+    sigma (0, N - 1) = sigma (N - 1, 0) = 1.0;
+  }
+
+  VectorXd u1 = ((v[0] * dt / h) * grad + (v[0] * dt / (2.0 * h) - v[0] * v[0] * dt * dt / (2.0 * h * h)) * sigma) * u;
+
+  u -= u1;
+  /*
+
   double sigmaL;
   double sigmaR;
 
@@ -81,6 +128,7 @@ void laxWendroff (Ref<VectorXd> u,
     sigmaL = (bc(u1, N, i) - bc(u1, N, i-1)) / h;
     u[i] = bc(u1, N, i) - 1 / h * (v[0] * dt * (bc(u1, N, i) - bc(u1, N, i-1)) + (v[0] * h / 2 * dt - v[0] * v[0] * dt * dt / 2) * (sigmaR - sigmaL));
   }
+  */
 }
 
 void frommVanLeer (Ref<VectorXd> u,
