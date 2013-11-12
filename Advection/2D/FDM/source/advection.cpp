@@ -96,7 +96,34 @@ void beamWarming (Ref<VectorXd> u,
   u = u1 - ((v[0] * dt / (2 * h)) * gradX + (v[0] * dt / (4.0 * h)) * (1 - v[0] * dt / (2.0 * h)) * sigmaX) * u1;
 }
 
-void laxWendroff (
+void laxWendroff (Ref<VectorXd> u,
+                  const double dt,
+                  const double h,
+                  const Vector2d v) {
+  const int N = sqrt (u.rows ());
+  static int oldN;
+
+  static SparseMatrix<double> gradX, gradY, sigmaX, sigmaY;
+
+  if (oldN != N) {
+    gradX = bGradX (N);
+    gradY = bGradY (N);
+
+    sigmaX = fGradX (N) - fGradX (N, -1);
+    sigmaY = fGradY (N) - fGradY (N, -1);
+
+    gradX.makeCompressed (); gradY.makeCompressed ();
+    sigmaX.makeCompressed (); sigmaY.makeCompressed ();
+    
+    oldN = N;
+  }
+
+  VectorXd u1 = 1;
+
+  u = u1 - ((v[0] * dt / (2 * h)) * gradX + (v[0] * dt / (4.0 * h)) * (1 - v[0] * dt / (2.0 * h)) * sigmaX) * u1;
+  u1 = u - ((v[1] * dt / h) * gradY + (v[1] * dt / (2.0 * h)) * (1 - v[1] * dt / h) * sigmaY) * u;
+  u = u1 - ((v[0] * dt / (2 * h)) * gradX + (v[0] * dt / (4.0 * h)) * (1 - v[0] * dt / (2.0 * h)) * sigmaX) * u1;
+}
 
 
 void frommVanLeer (Ref<VectorXd> u,
