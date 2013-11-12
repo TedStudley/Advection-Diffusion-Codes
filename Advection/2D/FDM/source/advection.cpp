@@ -63,9 +63,41 @@ void frommMethod (Ref<VectorXd> u,
 
   VectorXd u1 = u;
   u = u1 - ((v[0] * dt / (2 * h)) * gradX + (v[0] * dt / (8.0 * h)) * (1 - v[0] * dt / (2.0 * h)) * sigmaX) * u1;
-  u1 = u - ((v[1] * dt / h) * gradY + (v[1] * dt / (4.0 * h)) * (1 - v[1] * dt / h) * sigmaX) * u;
+  u1 = u - ((v[1] * dt / h) * gradY + (v[1] * dt / (4.0 * h)) * (1 - v[1] * dt / h) * sigmaY) * u;
   u = u1 - ((v[0] * dt / (2 * h)) * gradX + (v[0] * dt / (8.0 * h)) * (1 - v[0] * dt / (2.0 * h)) * sigmaX) * u1;
 }
+
+void beamWarming (Ref<VectorXd> u,
+                  const double dt,
+                  const double n,
+                  const VectorXd v) {
+  const int N = sqrt (u.rows ());
+  static int oldN;
+
+  static SparseMatrix<double> gradX, gradY, sigmaX, sigmaY;
+
+  if (oldN != N) {
+    gradX = bGradX (N);
+    gradY = bGradY (N);
+
+    sigmaX = bGradX (N) - bGradX (N, -1);
+    sigmaY = bgradY (N) - bGradY (N, -1);
+
+    gradX.makeCompressed (); gradY.makeCompressed ();
+    sigmaX.makeCompressed (); sigmaY.makeCompressed ();
+
+    oldN = N;
+  }
+
+  VectorXd u1 = u;
+  
+  u = u1 - ((v[0] * dt / (2 * h)) * gradX + (v[0] * dt / (4.0 * h)) * (1 - v[0] * dt / (2.0 * h)) * sigmaX) * u1;
+  u1 = u - ((v[1] * dt / h) * gradY + (v[1] * dt / (2.0 * h)) * (1 - v[1] * dt / h) * sigmaY) * u;
+  u = u1 - ((v[0] * dt / (2 * h)) * gradX + (v[0] * dt / (4.0 * h)) * (1 - v[0] * dt / (2.0 * h)) * sigmaX) * u1;
+}
+
+void laxWendroff (
+
 
 void frommVanLeer (Ref<VectorXd> u,
                    const double dt,
