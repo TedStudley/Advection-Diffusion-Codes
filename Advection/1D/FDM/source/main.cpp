@@ -18,8 +18,8 @@ using namespace Eigen;
 using namespace std;
 
 int main() {
-  int          N     = 256;
-  const double mu    = 0.75;
+  int          N     = 512;
+  const double mu    = 0.9;
   const double kappa = 1.0;
   const double T     = 1.0;
   Vector1d     v     = Vector1d::Constant(1.0);
@@ -38,17 +38,17 @@ int main() {
   #include "workingScripts/outputScripts/squareWave-fromm"
   #include "workingScripts/outputScripts/squareWave-fvl"
   
-  // #include "workingScripts/latexScripts/sineWave-upwind"
-  // #include "workingScripts/latexScripts/sineWave-beamWarming"
-  // #include "workingScripts/latexScripts/sineWave-laxWendroff"
-  // #include "workingScripts/latexScripts/sineWave-fromm"
-  // #include "workingScripts/latexScripts/sineWave-fvl"
+  #include "workingScripts/latexScripts/sineWave-upwind"
+  #include "workingScripts/latexScripts/sineWave-beamWarming"
+  #include "workingScripts/latexScripts/sineWave-laxWendroff"
+  #include "workingScripts/latexScripts/sineWave-fromm"
+  #include "workingScripts/latexScripts/sineWave-fvl"
   
-  // #include "workingScripts/latexScripts/squareWave-upwind"
-  // #include "workingScripts/latexScripts/squareWave-beamWarming"
-  // #include "workingScripts/latexScripts/squareWave-laxWendroff"
-  // #include "workingScripts/latexScripts/squareWave-fromm"
-  // #include "workingScripts/latexScripts/squareWave-fvl"
+  #include "workingScripts/latexScripts/squareWave-upwind"
+  #include "workingScripts/latexScripts/squareWave-beamWarming"
+  #include "workingScripts/latexScripts/squareWave-laxWendroff"
+  #include "workingScripts/latexScripts/squareWave-fromm"
+  #include "workingScripts/latexScripts/squareWave-fvl"
 
   return 0;
 }

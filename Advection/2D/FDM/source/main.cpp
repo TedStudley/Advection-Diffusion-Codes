@@ -15,15 +15,16 @@ using namespace Eigen;
 using namespace std;
 
 int main() {
-  int N                = 32;
-  const double mu      = 1.0;
+  int N                = 64;
+  const double mu      = 0.5;
   const double kappa   = 1.0;
-  Vector2d v           = {1.0, 0.0};
-  const double T       = 0.25;
-  const int k          = 2;
+  Vector2d v           = {1.0, 1.0};
+  const double T       = 1.0;
+  const int k1         = 2;
+  const int k2         = 2;
   double t0            = 0.0;
 
-  #include "workingScripts/outputScripts/sineWave-fromm"
+  #include "workingScripts/outputScripts/sineWave-fvl"
 
   return 0;
 }

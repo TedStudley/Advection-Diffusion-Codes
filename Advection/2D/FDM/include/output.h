@@ -2,7 +2,8 @@
 
 #include <Eigen/Dense>
 
-#include <fstream>
+#include <iostream>
+#include <ostream>
 
 using namespace Eigen;
 using namespace std;
@@ -17,3 +18,10 @@ void outputStats (const int,
                   const double,
                   const int,
                   const double);
+
+ofstream & openTeXDoc (string filename);
+
+void makeTeXRow (VectorXd   u,
+                 ofstream & stream);
+
+void closeTeXDoc (ofstream & stream);

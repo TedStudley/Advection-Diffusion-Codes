@@ -25,3 +25,29 @@ inline void init_timestep (double & dt,
     dt = T / (++N_timestep);
   }
 }
+
+inline void monotonicityCheck (VectorXd u,
+                               const double lower = 0.0,
+                               const double upper = 1.0) {
+  static double old_lower;
+  static double old_upper;
+
+  static bool next_step;
+  if (!next_step) {
+    old_lower = lower;
+    old_upper = upper;
+    next_step = true;
+  }
+
+  double new_lower = u.minCoeff ();
+  double new_upper = u.maxCoeff ();
+
+  if (new_lower < old_lower || new_upper > old_upper) {
+    cerr << "==> Monotonicity not preserved! <==" << endl
+         << "==>\tlower: " << old_lower << " -> " << new_lower << endl
+         << "==>\tupper: " << old_upper << " -> " << new_upper << endl;
+  }
+
+  old_lower = new_lower;
+  old_upper = new_upper;
+}

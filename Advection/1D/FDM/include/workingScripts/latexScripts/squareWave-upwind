@@ -1,7 +1,10 @@
 {
   ofstream & texStream = openTeXDoc ("output/latexTables/squareWave-upwind.tex");
 
+  cout << "==> Generating LaTeX Convergence Tables for Upwind Advection Method on Square Wave initial data:" << endl;
   for (int N = 16; N < 8192; N *= 2) {
+    cout << "====> N: " << N << endl;
+
     VectorXd u (N);
     VectorXd utemp (N);
 

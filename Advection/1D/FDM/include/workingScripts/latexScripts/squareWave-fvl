@@ -1,7 +1,10 @@
 {
   ofstream & texStream = openTeXDoc ("output/latexTables/squareWave-fvl.tex");
 
+  cout << "==> Generating LaTeX Convergence Tables for Fromm/Van-Leer Advection Method on Square Wave initial Data:" << endl;
   for (int N = 16; N < 8192; N *= 2) {
+    cout << "====> N: " << N << endl;
+
     VectorXd u (N);
     VectorXd utemp (N);
 
