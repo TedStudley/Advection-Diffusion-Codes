@@ -1,0 +1,33 @@
+{
+  ofstream & texStream = openTeXDoc ("output/latexTables/sineWave-beamWarming.tex");
+  
+  cout << "==> Generating LaTeX Convergence Tables for Beam-Warming Advection method on Sine Wave initial data:" << endl;
+  for (int N = 4; N < 1024; N *= 2) {
+    cout << "====> N: " << N << endl;
+
+    VectorXd u (N * N);
+    VectorXd utemp (N * N);
+
+    double h       = 1.0 / N;
+    double dt      = mu * h / (twoNorm (v) * kappa);
+
+    init_timestep (dt, T);
+
+    sineWave (u, k1, k2);
+
+    double t = t0;
+    
+    for (int i = 0; TOL < T - t; ++i) {
+      beamWarming (u, dt, h, v);
+      t += dt;
+    }
+
+    sineWave (utemp, k1, k2);
+
+    VectorXd error = u - utemp;
+
+    makeTeXRow (error, texStream);
+  }
+
+  closeTeXDoc (texStream);
+}

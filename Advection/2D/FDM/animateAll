@@ -1,0 +1,12 @@
+#! /bin/bash
+
+initialConditions=(sineWave squareWave)
+methods=(upwind laxWendroff beamWarming fromm fvl)
+
+for D in "${initialConditions[@]}"; do
+  for M in "${methods[@]}"; do
+    echo "animating ${D} ${M}:"
+    dir="output/${D}/${M}/"
+    ./animationScript $dir $1 $dir/ani.gif
+  done
+done

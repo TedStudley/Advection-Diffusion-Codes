@@ -1,0 +1,33 @@
+{
+  ofstream & texStream = openTeXDoc ("output/latexTables/squareWave-upwind.tex");
+  
+  cout << "==> Generating LaTeX Convergence Tables for Upwind Advection method on Square Wave initial data:" << endl;
+  for (int N = 4; N < 1024; N *= 2) {
+    cout << "====> N: " << N << endl;
+
+    VectorXd u (N * N);
+    VectorXd utemp (N * N);
+
+    double h       = 1.0 / N;
+    double dt      = mu * h / (twoNorm (v) * kappa);
+
+    init_timestep (dt, T);
+
+    squareWave (u);
+
+    double t = t0;
+    
+    for (int i = 0; TOL < T - t; ++i) {
+      upwindMethod (u, dt, h, v);
+      t += dt;
+    }
+
+    squareWave (utemp);
+
+    VectorXd error = u - utemp;
+
+    makeTeXRow (error, texStream);
+  }
+
+  closeTeXDoc (texStream);
+}

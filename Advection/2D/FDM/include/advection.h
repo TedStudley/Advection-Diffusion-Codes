@@ -8,6 +8,16 @@ void upwindMethod (Ref<VectorXd>  u,
                    const double   dt,
                    const double   h,
                    const Vector2d v);
+
+void laxWendroff (Ref<VectorXd>  u,
+                  const double   dt,
+                  const double   h,
+                  const Vector2d v);
+
+void beamWarming (Ref<VectorXd>  u,
+                  const double   dt,
+                  const double   h,
+                  const Vector2d v);
                    
 void frommMethod (Ref<VectorXd>  u,
                   const double   dt,

@@ -1,9 +1,0 @@
-#! /bin/bash
-for initial in 'sineWave' 'squareWave'
-do
-  for method in 'upwind' 'beamWarming' 'laxWendroff' 'fromm' 'fvl'
-  do
-    directory=output/${initial}/${method}/;
-    ./animationScript ${directory} 256 ${directory}ani.gif
-  done
-done

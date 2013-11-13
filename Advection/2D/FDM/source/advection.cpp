@@ -69,8 +69,8 @@ void frommMethod (Ref<VectorXd> u,
 
 void beamWarming (Ref<VectorXd> u,
                   const double dt,
-                  const double n,
-                  const VectorXd v) {
+                  const double h,
+                  const Vector2d v) {
   const int N = sqrt (u.rows ());
   static int oldN;
 
@@ -81,7 +81,7 @@ void beamWarming (Ref<VectorXd> u,
     gradY = bGradY (N);
 
     sigmaX = bGradX (N) - bGradX (N, -1);
-    sigmaY = bgradY (N) - bGradY (N, -1);
+    sigmaY = bGradY (N) - bGradY (N, -1);
 
     gradX.makeCompressed (); gradY.makeCompressed ();
     sigmaX.makeCompressed (); sigmaY.makeCompressed ();
@@ -118,7 +118,7 @@ void laxWendroff (Ref<VectorXd> u,
     oldN = N;
   }
 
-  VectorXd u1 = 1;
+  VectorXd u1 = u;
 
   u = u1 - ((v[0] * dt / (2 * h)) * gradX + (v[0] * dt / (4.0 * h)) * (1 - v[0] * dt / (2.0 * h)) * sigmaX) * u1;
   u1 = u - ((v[1] * dt / h) * gradY + (v[1] * dt / (2.0 * h)) * (1 - v[1] * dt / h) * sigmaY) * u;
