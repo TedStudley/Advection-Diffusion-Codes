@@ -24,19 +24,19 @@ int main() {
   const int k2         = 2;
   double t0            = 0.0;
 
-  #include "workingScripts/outputScripts/sineWave-upwind"
-  #include "workingScripts/outputScripts/sineWave-laxWendroff"
-  #include "workingScripts/outputScripts/sineWave-beamWarming"
-  #include "workingScripts/outputScripts/sineWave-fromm"
-  #include "workingScripts/outputScripts/sineWave-fvl"
+//#include "workingScripts/outputScripts/sineWave-upwind"
+//#include "workingScripts/outputScripts/sineWave-laxWendroff"
+//#include "workingScripts/outputScripts/sineWave-beamWarming"
+//#include "workingScripts/outputScripts/sineWave-fromm"
+//#include "workingScripts/outputScripts/sineWave-fvl"
 
-  #include "workingScripts/outputScripts/squareWave-upwind"
-  #include "workingScripts/outputScripts/squareWave-laxWendroff"
-  #include "workingScripts/outputScripts/squareWave-beamWarming"
-  #include "workingScripts/outputScripts/squareWave-fromm"
-  #include "workingScripts/outputScripts/squareWave-fvl"
+//#include "workingScripts/outputScripts/squareWave-upwind"
+//#include "workingScripts/outputScripts/squareWave-laxWendroff"
+//#include "workingScripts/outputScripts/squareWave-beamWarming"
+//#include "workingScripts/outputScripts/squareWave-fromm"
+//#include "workingScripts/outputScripts/squareWave-fvl"
 
-  #include "workingScripts/latexScripts/sineWave-upwind"
+//#include "workingScripts/latexScripts/sineWave-upwind"
   #include "workingScripts/latexScripts/sineWave-laxWendroff"
   #include "workingScripts/latexScripts/sineWave-beamWarming"
   #include "workingScripts/latexScripts/sineWave-fromm"
