@@ -12,7 +12,6 @@
 #include <sstream>
 
 #define CHECK_MONOTONICITY true
-#define dim 1
 
 using namespace Eigen;
 using namespace std;
